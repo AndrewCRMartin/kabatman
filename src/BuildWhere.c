@@ -3,18 +3,20 @@
    Program:    KabatMan
    File:       BuildWhere.c
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   Phone:      +44 (0) 1372 275775 (Home)
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -60,13 +62,6 @@
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
    V2.19 14.10.98 Skipped
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Fixed long-standing bug in SetWhereData() which meant
-                  you couldn't do a string comparison with anything 
-                  containing a ' or "
-   V2.22 31.07.00 Skipped
-   V2.23 03.04.02 Skipped
-   V2.24 28.02.05 GetWord() takes extra parameter
 
 *************************************************************************/
 /* Includes
@@ -102,7 +97,6 @@
    20.04.94 Original   By: ACRM
    22.06.95 Doubled length of word buffer
    23.06.95 Added missing return value
-   28.02.05 Added word length parameter to GetWord()
 */
 BOOL BuildWhere(char *buffer)
 {
@@ -113,7 +107,7 @@ BOOL BuildWhere(char *buffer)
    /* Step through the buffer pulling a word at a time out of the buffer*/
    do
    {
-      pch=GetWord(pch,word,2*MAXBUFF);
+      pch=GetWord(pch,word);
 
       if(upstrcmp(word,"WHERE"))  /* If the word is not `WHERE'         */
       {
@@ -121,7 +115,7 @@ BOOL BuildWhere(char *buffer)
          {
             if(error) return(FALSE);
             
-            pch = HandleWhereSubClause(pch,word,&error,2*MAXBUFF);
+            pch = HandleWhereSubClause(pch,word,&error);
             if(error) return(FALSE);
          }
       }  /* This was not `WHERE'                                        */
@@ -186,13 +180,11 @@ BOOL CheckForSetOper(char *word, BOOL *error)
 }
 
 /************************************************************************/
-/*>char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
-                              int maxlength)
+/*>char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
    -----------------------------------------------------------------
    Input:   char  *buffer      Current start of next word in buffer
             char  *word        The current word to be tested (modified on
                                exit)
-            int   maxlength    Maximum word length
    Output:  BOOL  *error       TRUE if an error occurred
    Returns: char  *            Pointer to start of next word in buffer 
                                after processing this sub-clause
@@ -204,10 +196,8 @@ BOOL CheckForSetOper(char *word, BOOL *error)
    places the data into the WHERE linked list
 
    20.04.94 Original    By: ACRM
-   28.02.05 Added maxlength and added word length parameter to GetWord()
 */
-char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
-                           int maxlength)
+char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
 {
    int   i;
    char  *pch = buffer;
@@ -248,7 +238,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
          FillParameter(gCurrentWhere->param, word);
          
          /* Now get the comparison to be performed                      */
-         pch = GetWord(pch,word,maxlength);
+         pch = GetWord(pch,word);
          if(!word[0] || !SetComparison(gCurrentWhere,word))
          {
             *error = TRUE;
@@ -256,7 +246,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
          }
                 
          /* Now get the data for comparison                             */
-         pch = GetWord(pch,word,maxlength);
+         pch = GetWord(pch,word);
 
          if(!word[0])
          {
@@ -357,47 +347,21 @@ BOOL SetComparison(WHERE *p, char *word)
    trailing ' or "
 
    20.04.94 Original    By: ACRM
-   13.07.00 The check for trailing ' or " was actually stopping the string
-            at the first occurrence rather than the last. Fixed this!
 */
 void SetWhereData(WHERE *wh, char *word)
 {  
    char *p;
-   int  len;
    
-   /* If the first character is a ' or " then skip it and end the string at
-      the last ' or "
-   */
-   if(word[0] == '"')
-   {
-      strcpy(wh->data, word+1);
-      len = strlen(wh->data);
-      for(p=wh->data + len-1; p>=wh->data; p--)
-      {
-         if(*p=='"')
-         {
-            *p = '\0';
-            break;
-         }
-      }
-   }
-   else if(word[0] == '\'')
-   {
-      strcpy(wh->data, word+1);
-      len = strlen(wh->data);
-      for(p=wh->data + len-1; p>=wh->data; p--)
-      {
-         if(*p=='\'')
-         {
-            *p = '\0';
-            break;
-         }
-      }
-   }
-   else
-   {
-      strcpy(wh->data, word);
-   }
+   /* Skip any leading ' or "                                           */
+   for(p=word; *p=='"' || *p=='\''; p++) ;
+
+   strcpy(wh->data,p);
+
+   /* Terminate copied data at ' or "                                   */
+   if((p=strchr(wh->data,'"'))!=NULL)
+      *p = '\0';
+   if((p=strchr(wh->data,'\''))!=NULL)
+      *p = '\0';
 }
 
 /************************************************************************/

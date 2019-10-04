@@ -3,18 +3,20 @@
    Program:    KabatMan
    File:       RdKabat.c
    
-   Version:    V2.24
-   Date:       29.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Read data from a new format Kabat sequence file
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   Phone:      +44 (0) 1372 275775 (Home)
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -62,11 +64,6 @@
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
    V2.19 14.10.98 Skipped
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Skipped
-   V2.22 31.07.00 Skipped
-   V2.23 03.04.02 Added refdate stuff
-   V2.24 28.02.05 Skipped
 
 *************************************************************************/
 /* Includes
@@ -440,7 +437,6 @@ static int InsertSeq(KABATENTRY *KabatEntry, char *resnum, int *i,
    17.03.94 Original    By: ACRM
    13.04.94 Changed name from ClearEntry()
    02.04.96 Added kadbid
-   03.04.02 Added refdate
 */
 void ClearKabatEntry(KABATENTRY *KabatEntry)
 {
@@ -459,7 +455,6 @@ void ClearKabatEntry(KABATENTRY *KabatEntry)
    KabatEntry->kabatseq[0]  = '\0';
    KabatEntry->sequence[0]  = '\0';
    KabatEntry->kadbid[0]    = '\0';
-   KabatEntry->refdate      = 9999;
 }
 
 
@@ -846,13 +841,12 @@ char *CreateKabatNumber(char *resnum, int offset)
             of Kabat database.
    02.04.96 Added KADBID and changed while to do/while since the
             KADBID stuff is in the buffer when we enter this routine
-   03.04.02 Added reading of earliest reference date into refdate
 */
 int ReadKabatEntry(FILE *fp, char *buffer, int bufflen, 
                    KABATENTRY *KabatEntry, BOOL *insert)
 {
    BOOL GotJournal = FALSE;
-
+   
    do
    {
       TERMINATE(buffer);
@@ -881,51 +875,12 @@ int ReadKabatEntry(FILE *fp, char *buffer, int bufflen,
       }
       else if(!strncmp(buffer,"AAREFJ    ",10))
       {
-         int  len     = strlen(KabatEntry->reference);
-         char *year_p = buffer+12;
-         int  pubdate;
-         BOOL GotDate = FALSE;
+         int len = strlen(KabatEntry->reference);
 
          strncat(KabatEntry->reference,buffer+12,LARGEBUFF-len);
          KabatEntry->reference[LARGEBUFF-1] = '\0';
 
          GotJournal = TRUE;
-
-         /* 03.04.02 Grab the year out of this reference                */
-         while(!GotDate && (year_p!=NULL) && *year_p)
-         {
-            /* Find the first occurrence of (                           */
-            if((year_p = strchr(year_p, '('))!=NULL)
-            {
-               /* See if there is a ) 5 characters on                   */
-               if((year_p+5) < (buffer+bufflen))
-               {
-                  if(*(year_p+5) == ')')
-                  {
-                     /* Set this to a null and read the intervening 
-                        characters as the date
-                     */
-                     *(year_p+5) = '\0';
-                     if(sscanf(year_p+1, "%d", &pubdate))
-                     {
-                        if(pubdate < KabatEntry->refdate)
-                        {
-                           KabatEntry->refdate = pubdate;
-                        }
-                        GotDate=TRUE;
-                     }
-                     else
-                     {
-                        year_p++;
-                     }
-                  }
-                  else
-                  {
-                     year_p++;
-                  }
-               }
-            }
-         }
       }
       else if(!strncmp(buffer,"ANNOTA SPEC",11))
       {
@@ -1133,7 +1088,7 @@ int ReadOldKabatEntry(FILE *fp, char *buffer, int bufflen,
 
 /************************************************************************/
 /*
-   #define TEST_RDKABAT
+#define TEST_RDKABAT
 */
 
 #ifdef TEST_RDKABAT
@@ -1144,7 +1099,7 @@ main()
    BOOL insert;
    KABATENTRY Kabat;
    
-   if((fp=fopen("test.kabat","r"))!=NULL)
+   if((fp=fopen("problems.kabat","r"))!=NULL)
    {
       while((len = ReadNextKabatEntry(fp, &Kabat, &insert, FALSE))!=0)
       {
@@ -1155,7 +1110,6 @@ main()
          else
          {
             printf("Entry:    %s\n",   Kabat.aaname);
-            printf("Date:     %d\n",   Kabat.refdate);
             printf("Sequence: %s\n\n", Kabat.sequence);
          }
       }

@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       subgroup.c
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Calculate human subgroup information
                This code modified from that kindly provided by
                Sophie Deret
@@ -16,7 +16,9 @@
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   Phone:      +44 (0) 1372 275775 (Home)
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -42,11 +44,6 @@
    V2.18 10.09.97 This is the first version to include subgroup 
                   calculation
    V2.19 14.10.98 Skipped
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Skipped
-   V2.22 31.07.00 Skipped
-   V2.23 03.04.02 Skipped
-   V2.24 28.02.05 Skipped
 
 *************************************************************************/
 /* Includes

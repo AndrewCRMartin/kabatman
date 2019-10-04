@@ -3,18 +3,19 @@
    Program:    KabatMan
    File:       kabatman.h
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -64,11 +65,6 @@
    V2.17 29.05.96 Skipped
    V2.18 09.09.97 Added FIELD_SUBGROUP
    V2.19 14.10.98 Added gDelim
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Skipped
-   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
-   V2.23 03.04.02 Added refdate to KabatEntry structure
-   V2.24 28.02.05 Added types for LFR1...HFR4
 
 *************************************************************************/
 #ifndef _KABATMAN_H
@@ -132,15 +128,6 @@
 #define FIELD_URLLIGHT  22
 #define FIELD_URLHEAVY  23
 #define FIELD_SUBGROUP  24
-#define FIELD_REFDATE   25
-#define FIELD_LFR1      26
-#define FIELD_LFR2      27
-#define FIELD_LFR3      28
-#define FIELD_LFR4      29
-#define FIELD_HFR1      30
-#define FIELD_HFR2      31
-#define FIELD_HFR3      32
-#define FIELD_HFR4      33
 
 #define OPER_AND        1        /* Types for logical set operators     */
 #define OPER_OR         2
@@ -157,14 +144,12 @@
 #define LOOP_KABAT      1        /* Loop definitions                    */
 #define LOOP_ABM        2
 #define LOOP_CHOTHIA    3
-#define LOOP_CONTACT    4
 
 #define CLASS_LAMBDA    1        /* Light chain classes                 */
 #define CLASS_KAPPA     2
 
 /* A linked list of DATA structures is used to store the actual Kabat
    data
-   03.04.02 Added refdate
 */
 typedef struct _data
 {
@@ -172,7 +157,6 @@ typedef struct _data
    BOOL         active[STACKDEPTH];
    char         **LNumbers,
                 **HNumbers;
-   int          refdate;
    char         antigen[LARGEBUFF],
                 class[SMALLBUFF],
                 name[SMALLBUFF],
@@ -227,8 +211,7 @@ typedef struct
    char *name,                 /* The loop name (L1,...)                */
         *KabatS,   *KabatE,    /* Kabat defintition (e.g. L24 L34)      */
         *AbMS,     *AbME,      /* AbM definition                        */
-        *ChothiaS, *ChothiaE,  /* Chothia definition                    */
-        *ContactS, *ContactE;  /* Contact definitions                   */
+        *ChothiaS, *ChothiaE;  /* Chothia definition                    */
 }  LOOP;
 
 typedef struct _chothia
@@ -283,15 +266,6 @@ FIELD gField[]    =                         /* Link field names/numbers */
    {  FIELD_URLLIGHT,  4, "URLLIGHT"},
    {  FIELD_URLHEAVY,  4, "URLHEAVY"},
    {  FIELD_SUBGROUP,  4, "SUBGROUP"},
-   {  FIELD_REFDATE,   3, "DATE"},
-   {  FIELD_LFR1,      4, "LFR1"},
-   {  FIELD_LFR2,      4, "LFR2"},
-   {  FIELD_LFR3,      4, "LFR3"},
-   {  FIELD_LFR4,      4, "LFR4"},
-   {  FIELD_HFR1,      4, "HFR1"},
-   {  FIELD_HFR2,      4, "HFR2"},
-   {  FIELD_HFR3,      4, "HFR3"},
-   {  FIELD_HFR4,      4, "HFR4"},
    {  0,               0, NULL}
 }  ;
 FIELD gSetOper[]  =                         /* Link set oper names/nums */
@@ -301,12 +275,12 @@ FIELD gSetOper[]  =                         /* Link set oper names/nums */
    {  0,               0, NULL}
 }  ;
 LOOP gLoopDefs[]   = 
-{  {  "L1", "L24", "L34",  "L24", "L34",  "L24", "L34",  "L30", "L36"},
-   {  "L2", "L50", "L56",  "L50", "L56",  "L50", "L56",  "L46", "L55"},
-   {  "L3", "L89", "L97",  "L89", "L97",  "L89", "L97",  "L89", "L96"},
-   {  "H1", "H31", "H35B", "H26", "H35B", "H26", "H32",  "H30", "H35B"},
-   {  "H2", "H50", "H65",  "H50", "H58",  "H52", "H56",  "H47", "H58"},
-   {  "H3", "H95", "H102", "H95", "H102", "H95", "H102", "H93", "H101"},
+{  {  "L1", "L24", "L34",  "L24", "L34",  "L24", "L34" },
+   {  "L2", "L50", "L56",  "L50", "L56",  "L50", "L56" },
+   {  "L3", "L89", "L97",  "L89", "L97",  "L89", "L97" },
+   {  "H1", "H31", "H35B", "H26", "H35B", "H26", "H32" },
+   {  "H2", "H50", "H65",  "H50", "H58",  "H52", "H56" },
+   {  "H3", "H95", "H102", "H95", "H102", "H95", "H102"},
    {  NULL, NULL , NULL  , NULL , NULL  , NULL , NULL  }
 }  ;
    

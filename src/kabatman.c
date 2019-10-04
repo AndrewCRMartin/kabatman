@@ -3,18 +3,20 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.20
+   Date:       28.05.99
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-9
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   Phone:      +44 (0) 1372 275775 (Home)
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -85,13 +87,6 @@
                   for SET commands
    V2.20 28.05.99 Fixed core-dump bug in EatInitials() which failed if
                   the input buffer was NULL
-   V2.21 13.07.00 Fixed long-standing bug in BuildWhere/SetWhereData() 
-                  which meant you couldn't do a string comparison with 
-                  anything containing a ' or "
-   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
-   V2.23 03.04.02 Added earliest reference date handling
-   V2.24 28.02.05 Added code to extract f/w regions in same way as CDRs
-                  GetWord() now takes extra parameter
 
 *************************************************************************/
 /* Includes
@@ -130,7 +125,6 @@ static BOOL doStoreData(DATA **pData, KABATENTRY *Kabat, DATA *extra,
    23.06.95 Removed redundant variables
    11.04.96 Initialise gFileDate
    14.10.98 DisplayCopyright() now takes a flag to introduce with #s
-   28.02.05 GetWord() now takes maximum word length
 */
 int main(int argc, char **argv)
 {
@@ -147,7 +141,7 @@ int main(int argc, char **argv)
    /* This causes GetWord() to return inverted commas as part of the
       words read out of the buffer. (Default mode is to strip them.)
    */
-   /*   GetWord(NULL, NULL, 0); */
+   GetWord(NULL, NULL);
 
    if(ParseCmdLine(argc, argv, &ForceRead))
    {
@@ -212,21 +206,17 @@ not available.\n\n");
    24.09.97 V2.18a
    14.10.98 V2.19 Preceeds each line with a # if DoHash specified
    28.05.99 V2.20
-   13.07.00 V2.21
-   31.07.00 V2.22
-   03.04.02 V2.23
-   28.02.05 V2.24
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.24\n");
+   printf("KabatMan V2.20\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
-   printf("Copyright (c) 1994-2005, Dr. Andrew C.R. Martin / University \
-College London / University of Reading.\n");
+   printf("Copyright (c) 1994-8, Dr. Andrew C.R. Martin, University \
+College London.\n");
    if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \
 of the\n");
@@ -333,7 +323,6 @@ BOOL ParseCmdLine(int argc, char **argv, BOOL *ForceRead)
    02.04.96 Added idlight & idheavy
    11.04.96 Skip comment lines from start of file, but reads date from
             them if found
-   03.04.02 Added reference date reading
 */
 BOOL ReadStoredData(char *filename)
 {
@@ -437,10 +426,6 @@ data.\n");
          strcpy(p->reference,  buffer);
          break;
       case 7:
-         if(!sscanf(buffer, "%d", &(p->refdate)) || (p->refdate == 0))
-            p->refdate = 9999;
-         break;
-      case 8:
          if(buffer[0] != '*')
          {
             /* We've got a special numbering scheme                     */
@@ -452,7 +437,7 @@ Kabat numbering of stored data\n");
             }
          }
          break;
-      case 9:
+      case 8:
          if(buffer[0] != '*')
          {
             /* We've got a special numbering scheme                     */
@@ -464,16 +449,16 @@ Kabat numbering of stored data\n");
             }
          }
          break;
-      case 10:
+      case 9:
          strcpy(p->light,      buffer);
          break;
-      case 11:
+      case 10:
          strcpy(p->heavy,      buffer);
          break;
-      case 12:
+      case 11:
          strcpy(p->idlight,    buffer);
          break;
-      case 13:
+      case 12:
          strcpy(p->idheavy,    buffer);
          break;
       default:
@@ -562,7 +547,6 @@ char **ReadSpecialNumbering(char *buffer)
    02.04.96 Added idlight & idheavy
    11.04.96 Writes comment lines at the top which include the date of
             writing and the file format version
-   03.04.02 Added refdate field. Bumped file version number
 */
 BOOL StoreKabatData(char *filename)
 {
@@ -586,9 +570,9 @@ BOOL StoreKabatData(char *filename)
 
       /* Put a header into the file including a date stamp              */
       fprintf(fp,"! KabatMan data file.\n");
-      fprintf(fp,"! KabatMan is Copyright 1994-2002, \
-Dr. Andrew C.R. Martin / UCL / University of Reading\n");
-      fprintf(fp,"! FILE VERSION: 4.0\n");
+      fprintf(fp,"! KabatMan is Copyright 1994-6, \
+Dr. Andrew C.R. Martin, UCL\n");
+      fprintf(fp,"! FILE VERSION: 3.0\n");
       fprintf(fp,"! CREATION DATE: %s\n",gFileDate);
       fprintf(fp,"!\n");
       
@@ -601,7 +585,6 @@ Dr. Andrew C.R. Martin / UCL / University of Reading\n");
          fprintf(fp,"%s\n",p->class);
          fprintf(fp,"%s\n",p->antigen);
          fprintf(fp,"%s\n",p->reference);
-         fprintf(fp,"%d\n",p->refdate);
 
          if(p->LNumbers)
          {
@@ -656,7 +639,6 @@ Dr. Andrew C.R. Martin / UCL / University of Reading\n");
    30.06.94 Added OldFormat flag
    21.07.94 Made OldFormat global
    11.04.96 On skipped chains, also print accession code
-   28.02.05 GetWord() now takes max word length
 */
 BOOL ReadKabatData(char *FoF)
 {
@@ -710,9 +692,9 @@ BOOL ReadKabatData(char *FoF)
          
          /* Got a line specifying a group of files                      */
          p = buffer;
-         p = GetWord(p, HFile, 160);
+         p = GetWord(p, HFile);
          for(i=0; i<MAXLFILES; i++)
-            p = GetWord(p, LFile[i], 160);
+            p = GetWord(p, LFile[i]);
 
          /* Open these files                                            */
          if(HFile[0] && HFile[0] != '-')
@@ -1156,7 +1138,6 @@ DATA *StoreUnmatchedL(DATA *Data, DATA *KabL[], int NLFile, char *source)
    18.07.94 Copies into source as well as fsource
    21.07.94 Added gOldFormat flag to calls to BuildKabatNumbering()
    02.04.96 Added kadbid
-   03.04.02 Added refdate
 */
 void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain, 
                      BOOL GotInsert)
@@ -1168,7 +1149,6 @@ void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain,
    strcpy(p->source,     Kabat.source);
    strcpy(p->reference,  Kabat.reference);
 
-   p->refdate   = Kabat.refdate;
    p->active[0] = FALSE;
 
    if(chain=='l' || chain=='L')
@@ -1201,7 +1181,6 @@ void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain,
    22.04.94 Added LNumbers & HNumbers
    21.07.94 Fixed LNumbers and HNumbers only to be copied if needed (!)
    02.04.96 Added kadbid
-   03.04.02 Added refdate
 */
 void CopyDataToData(DATA *p, DATA *extra, char chain)
 {
@@ -1212,7 +1191,6 @@ void CopyDataToData(DATA *p, DATA *extra, char chain)
    strcpy(p->fsource,    extra->fsource);
    strcpy(p->reference,  extra->reference);
 
-   p->refdate   = extra->refdate;
    p->active[0] = FALSE;
 
    if(chain=='l' || chain=='L')
@@ -1687,8 +1665,6 @@ void BuildFrom(char *buffer)
    29.05.96 Added SET CANONICAL {type}
    14.10.98 Added SET DELIMiter {delim}
             Added check for value!
-   31.07.00 Added LOOP definitions for Contact CDR definitions
-   28.02.05 GetWord() now takes max word length
 */
 void HandleSetCommand(char *buffer)
 {
@@ -1697,13 +1673,13 @@ void HandleSetCommand(char *buffer)
         *p = buffer;
    
    value[0] = '\0';
-   p = GetWord(p,word,MAXBUFF);
+   p = GetWord(p,word);
    do
    {
       if(upstrcmp(word,"SET"))
       {
          /* It's not `SET', so it's a variable name, so get the value   */
-         p = GetWord(p,value,MAXBUFF);
+         p = GetWord(p,value);
 
          /* Carry out required action for each variable                 */
          if(!upstrncmp(word,"LEVEL",5))
@@ -1719,8 +1695,6 @@ void HandleSetCommand(char *buffer)
                gLoopMode = LOOP_ABM;
             else if(!upstrncmp(value,"CHOTH",5))
                gLoopMode = LOOP_CHOTHIA;
-            else if(!upstrncmp(value,"CONT",4))
-               gLoopMode = LOOP_CONTACT;
             else
                fprintf(stderr,"Error: Unknown loop mode (%s)\n",value);
          }
@@ -1808,7 +1782,7 @@ reading key residue file\n");
       }
 
       /* Get the next word out of the string                            */
-      p = GetWord(p,word,MAXBUFF);
+      p = GetWord(p,word);
    }  while(p!=NULL);
 
    /* 14.10.98 Added check that a value was specified!                  */
@@ -1842,7 +1816,6 @@ reading key residue file\n");
             keyword.
    29.05.96 Now frees any pre-existing data so this can be called
             multiple times.
-   28.02.05 GetWord() now takes max word length
 */
 BOOL ReadChothiaData(char *filename)
 {
@@ -1914,13 +1887,13 @@ BOOL ReadChothiaData(char *filename)
             if(p==NULL) return(FALSE);
             
             /* Strip out the word LOOP                                  */
-            chp = GetWord(buffer,word,MAXBUFF);
+            chp = GetWord(buffer,word);
             /* Get the loop id                                          */
-            chp = GetWord(chp,p->LoopID,8);
+            chp = GetWord(chp,p->LoopID);
             /* Get the class name                                       */
-            chp = GetWord(chp,p->class,8);
+            chp = GetWord(chp,p->class);
             /* Get the loop length                                      */
-            chp = GetWord(chp,word,MAXBUFF);
+            chp = GetWord(chp,word);
             sscanf(word,"%d",&(p->length));
             
             /* Set the resnum counter to zero                           */
@@ -1931,8 +1904,8 @@ BOOL ReadChothiaData(char *filename)
             /* Not the start of an entry, so must be a resid/type pair  */
             if(p!=NULL)
             {
-               chp = GetWord(buffer,p->resnum[count],8);
-               chp = GetWord(chp,p->restype[count],24);
+               chp = GetWord(buffer,p->resnum[count]);
+               chp = GetWord(chp,p->restype[count]);
                if(++count >= MAXCHOTHRES)
                {
                   fprintf(stderr,"Error: (Reading Chothia file) Too many \

@@ -3,18 +3,20 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   Phone:      +44 (0) 1372 275775 (Home)
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -69,11 +71,6 @@
    V2.19 14.10.98 The field delimiter now comes from gDelim instead of
                   being hardcoded - DisplaySearch()
                   Fixed bug in DoGetSubgroup()
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Skipped
-   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
-   V2.23 03.04.02 Added reference handling
-   V2.24 28.02.05 Added code to extract f/w regions in same way as CDRs
 
 *************************************************************************/
 /* Includes
@@ -217,13 +214,11 @@ BOOL HandleLogical(WHERE *wh, int *StackDepth)
    11.05.94 Added Canonical class handling
    02.04.96 Added ID (Kadbid) handling
    10.09.97 Added subgroup handling
-   03.04.02 Added reference date
-   28.02.05 Added LFR1...HFR4 handling
 */
 BOOL HandleMatch(WHERE *wh, int *StackDepth)
 {
    DATA *d;
-   char loop[160],
+   char loop[40],
         res,
         class[8];
    int  len,
@@ -360,59 +355,6 @@ information\n");
          d->active[(*StackDepth)-1] = DoStrTest(class,
                                                 wh->comparison, 
                                                 wh->data, FALSE);
-         break;
-      case FIELD_REFDATE:
-         if(!sscanf(wh->data,"%d",&idata)) idata=0; /* Get WHERE date   */
-         d->active[(*StackDepth)-1] = DoIntTest(d->refdate,
-                                                wh->comparison, idata);
-         break;
-      case FIELD_LFR1:
-         FillFW("LFR1",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_LFR2:
-         FillFW("LFR2",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_LFR3:
-         FillFW("LFR3",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_LFR4:
-         FillFW("LFR4",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_HFR1:
-         FillFW("HFR1",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_HFR2:
-         FillFW("HFR2",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_HFR3:
-         FillFW("HFR3",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
-         break;
-      case FIELD_HFR4:
-         FillFW("HFR4",d,loop);
-         d->active[(*StackDepth)-1] = DoStrTest(loop,
-                                                wh->comparison, 
-                                                wh->data, TRUE);
          break;
       default:
          return(FALSE);
@@ -690,15 +632,13 @@ BOOL IsComplete(DATA *d)
    24.09.97 Added check that fpPIR != fp before closing
    14.10.98 Field delimiter now comes from gDelim instead of hard-coded
             Comment at end is introduced with a #
-   03.04.02 Added reference date
-   28.02.05 Added LFR1...HFR4 handling
 */
 void DisplaySearch(FILE *fp, int StackDepth)
 {
    DATA      *d;
    SELECTION *p;
    FILE      *fpPIR     = NULL;
-   char      loop[160],
+   char      loop[40],
              class[8],
              res;
    int       len,
@@ -843,50 +783,6 @@ void DisplaySearch(FILE *fp, int StackDepth)
                fprintf(fp,"%s",class);
                GotPrint = TRUE;
                break;
-            case FIELD_REFDATE:
-               fprintf(fp,"%d",d->refdate);
-               GotPrint = TRUE;
-               break;
-            case FIELD_LFR1:
-               FillFW("LFR1", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_LFR2:
-               FillFW("LFR2", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_LFR3:
-               FillFW("LFR3", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_LFR4:
-               FillFW("LFR4", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_HFR1:
-               FillFW("HFR1", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_HFR2:
-               FillFW("HFR2", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_HFR3:
-               FillFW("HFR3", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
-            case FIELD_HFR4:
-               FillFW("HFR4", d, loop);
-               fprintf(fp,"%s",loop);
-               GotPrint = TRUE;
-               break;
             default:
                break;
             }
@@ -916,7 +812,6 @@ void DisplaySearch(FILE *fp, int StackDepth)
    Extracts the sequence for a specified loop from a data structure
 
    25.04.94 Original    By: ACRM
-   31.07.00 Added CONTACT loop definitions
 */
 void FillLoop(char *loopname, DATA *d, char *loop)
 {
@@ -952,10 +847,6 @@ void FillLoop(char *loopname, DATA *d, char *loop)
          case LOOP_CHOTHIA:
             strcpy(start, gLoopDefs[i].ChothiaS);
             strcpy(end,   gLoopDefs[i].ChothiaE);
-            break;
-         case LOOP_CONTACT:
-            strcpy(start, gLoopDefs[i].ContactS);
-            strcpy(end,   gLoopDefs[i].ContactE);
             break;
          default:
             return;
@@ -1502,181 +1393,6 @@ void WriteAsPIR(FILE *fp, DATA *d)
       }
       fprintf(fp,"*\n");
    }
-}
-
-
-/************************************************************************/
-/*>void FillFW(char *fwname, DATA *d, char *framework)
-   --------------------------------------------------
-   Input:   char  *fwname       The fw region name (LFR1...HFR4)
-            DATA  *d            A data structure
-   Output:  char  *framework    The sequence of the specified framework
-
-   Extracts the sequence for a specified framework region from a data 
-   structure
-
-   28.02.05 Original    By: ACRM
-*/
-void FillFW(char *fwname, DATA *d, char *framework)
-{
-   int  i,
-        j,
-        count,
-        StartOff = (-1),
-        EndOff = (-1);
-   char start[8],
-        end[8],
-        pre[8],
-        post[8],
-        *chain,
-        **KabatIndex;
-   
-   /* Default (error) situation, output a blank string                  */
-   framework[0] = '\0';
-
-   /* Set up the bounding loops                                         */
-   if(!strncmp(fwname,"LFR1",4))
-   {
-      strcpy(pre, "");
-      strcpy(post, "L1");
-   }
-   else if(!strncmp(fwname,"LFR2",4))
-   {
-      strcpy(pre, "L1");
-      strcpy(post,"L2");
-   }
-   else if(!strncmp(fwname,"LFR3",4))
-   {
-      strcpy(pre, "L2");
-      strcpy(post,"L3");
-   }
-   else if(!strncmp(fwname,"LFR4",4))
-   {
-      strcpy(pre, "L3");
-      strcpy(post,"");
-   }
-   else if(!strncmp(fwname,"HFR1",4))
-   {
-      strcpy(pre, "");
-      strcpy(post,"H1");
-   }
-   else if(!strncmp(fwname,"HFR2",4))
-   {
-      strcpy(pre, "H1");
-      strcpy(post,"H2");
-   }
-   else if(!strncmp(fwname,"HFR3",4))
-   {
-      strcpy(pre, "H2");
-      strcpy(post,"H3");
-   }
-   else if(!strncmp(fwname,"HFR4",4))
-   {
-      strcpy(pre, "H3");
-      strcpy(post,"");
-   }
-           
-   /* Store pointers depending on chain                                 */
-   if(!upstrncmp(fwname, "L", 1))
-   {
-      chain      = d->light;
-      KabatIndex = d->LNumbers;
-   }
-   else
-   {
-      chain      = d->heavy;
-      KabatIndex = d->HNumbers;
-   }
-
-
-   /* Search the loop definition table for this loop                    */
-   if(strlen(pre) == 0)
-   {
-      StartOff = 0;
-   }
-   else
-   {
-      for(i=0; gLoopDefs[i].name != NULL; i++)
-      {
-         if(!upstrncmp(pre,gLoopDefs[i].name,2))
-         {
-            /* Found the required loop, get the start                   */
-            switch(gLoopMode)
-            {
-            case LOOP_KABAT:
-               strcpy(start, gLoopDefs[i].KabatE);
-               break;
-            case LOOP_ABM:
-               strcpy(start, gLoopDefs[i].AbME);
-               break;
-            case LOOP_CHOTHIA:
-               strcpy(start, gLoopDefs[i].ChothiaE);
-               break;
-            case LOOP_CONTACT:
-               strcpy(start, gLoopDefs[i].ContactE);
-               break;
-            default:
-               return;
-            }
-
-            StartOff = GetKabatOffset(KabatIndex, start)+1;
-            break;
-         }
-      }
-   }
-   
-   if(strlen(post) == 0)
-   {
-      if(!upstrncmp(fwname, "L", 1))
-      {
-         strcpy(end, "L109");
-      }
-      else
-      {
-         strcpy(end, "H113");
-      }
-
-      EndOff = GetKabatOffset(KabatIndex, end);
-   }
-   else
-   {
-      for(i=0; gLoopDefs[i].name != NULL; i++)
-      {
-         if(!upstrncmp(post,gLoopDefs[i].name,2))
-         {
-            switch(gLoopMode)
-            {
-            case LOOP_KABAT:
-               strcpy(end,   gLoopDefs[i].KabatS);
-               break;
-            case LOOP_ABM:
-               strcpy(end,   gLoopDefs[i].AbMS);
-               break;
-            case LOOP_CHOTHIA:
-               strcpy(end,   gLoopDefs[i].ChothiaS);
-               break;
-            case LOOP_CONTACT:
-               strcpy(end,   gLoopDefs[i].ContactS);
-               break;
-            default:
-               return;
-            }
-            EndOff = GetKabatOffset(KabatIndex, end)-1;
-            break;
-         }
-      }
-   }
-
-   if((StartOff == (-1)) || (EndOff == (-1)))
-      return;
-
-   /* Build residues into the output loop array                         */
-   for(count=0,j=StartOff; j<=EndOff; j++)
-   {
-      if(gShowInserts || chain[j] != '-')
-         framework[count++] = chain[j];
-   }
-   framework[count] = '\0';
 }
 
 

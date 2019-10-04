@@ -3,18 +3,19 @@
    Program:    KabatMan
    File:       RdKabat.h
    
-   Version:    V2.24
-   Date:       28.02.05
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Include file for using ReadNextKabatEntry()
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   EMail:      andrew@bioinf.org.uk
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -60,11 +61,6 @@
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
    V2.19 14.10.98 Skipped
-   V2.20 xx.xx.xx Skipped
-   V2.21 13.07.00 Skipped
-   V2.22 31.07.00 Skipped
-   V2.23 03.04.02 Added refdate to KABATENTRY
-   V2.24 28.02.05 Skipped
 
 *************************************************************************/
 #ifndef _RDKABAT_H
@@ -99,7 +95,6 @@
 */
 typedef struct
 {
-   int  refdate;
    char aatable[SMALLBUFF],
         aaname[SMALLBUFF],
         codname[SMALLBUFF],
