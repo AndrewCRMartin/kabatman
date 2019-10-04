@@ -3,12 +3,12 @@
                                KabatMan
                                --------
 
-                              Version 2.19
-                           14th October, 1998
+                              Version 2.25
+                            24th August, 2006
 
 
-                          Copyright (c) 1994-8
-                      Dr. Andrew C.R. Martin / UCL,
+                          Copyright (c) 1994-2006
+                  Dr. Andrew C.R. Martin / UCL / Reading,
 
 
                  Biomolecular Structure & Modelling Unit,
@@ -194,6 +194,8 @@ items; you don't type them!)  If a light-chain dump file has no
 matching heavy chain dump file, the heavy chain file must be specified
 as `-'.
 
+NOTE THIS FILE MUST BE CALLED kabat.fof
+
 The following example file may be used for the Kabat dump files
 available at the time of writing:
 
@@ -323,8 +325,8 @@ The following variables may be set:
 
    Variable     Values               Notes
    --------     ------               -----
-   LOOPS        KABAT, ABM, CHOTHIA  Sets the definitions to use for 
-                                     the CDRs
+   LOOPS        KABAT, ABM, CHOTHIA, Sets the definitions to use for 
+                CONTACT              the CDRs
    INFO         integer              Sets the information level for 
                                      messages
    INSERTS      ON, OFF              Specifies whether CDRs should be 
@@ -400,32 +402,43 @@ The select statement may extend over more than one line.
 
 The following fields may be displayed:
 
-   Property        Notes
-   --------        -------------------------
-   NAME            Name of antibody
-   ANTIGEN         Antigen (or blank string)
-   L1              Sequence of CDR L1
-   L2              Sequence of CDR L2
-   L3              Sequence of CDR L3
-   H1              Sequence of CDR H1
-   H2              Sequence of CDR H2
-   H3              Sequence of CDR H3
-   CLASS           Light chain class (derived from file or filename)
-                   Note that there may also be heavy chain information
-                   here (e.g. IGG-KAPPA)
-   SOURCE          Animal source (derived from filename)
-   REFerence       Publication reference
-   LENgth(loop)    Length of specified CDR
-   RESidue(pos)    Amino acid at specified residue
-   PIRfile[(file)] Create a PIR file (of given name if specified)
-   LIGHT           The light chain sequence
-   HEAVY           The heavy chain sequence
-   CANonical(loop) The Chothia canonical class for a loop
-   IDLight         The accession code for the light chain
-   IDHeavy         The accession code for the heavy chain
-   URLLight        An HTML hypertext link to the light chain raw data
-   URLHeavy        An HTML hypertext link to the heavy chain raw data
-   SUBGroup(chain) The subgroup (currently only for human sequences)
+   Property         Notes
+   --------         -------------------------
+   NAME             Name of antibody
+   ANTIGEN          Antigen (or blank string)
+   L1               Sequence of CDR L1
+   L2               Sequence of CDR L2
+   L3               Sequence of CDR L3
+   H1               Sequence of CDR H1
+   H2               Sequence of CDR H2
+   H3               Sequence of CDR H3
+   CLASS            Light chain class (derived from file or filename)
+                    Note that there may also be heavy chain information
+                    here (e.g. IGG-KAPPA)
+   SOURCE           Animal source (derived from filename)
+   REFerence        Publication reference
+   LENgth(loop)     Length of specified CDR
+   RESidue(pos)     Amino acid at specified residue
+   PIRfile[(file)]  Create a PIR file (of given name if specified)
+   LIGHT            The light chain sequence
+   HEAVY            The heavy chain sequence
+   CANonical(loop)  The Chothia canonical class for a loop
+   IDLight          The accession code for the light chain
+   IDHeavy          The accession code for the heavy chain
+   URLLight         An HTML hypertext link to the light chain raw data
+   URLHeavy         An HTML hypertext link to the heavy chain raw data
+   SUBGroup(chain)  The subgroup (currently only for human sequences)
+   DATe             The year of the earliest reference
+   LFR1             Sequence of light framework 1
+   LFR2             Sequence of light framework 2
+   LFR3             Sequence of light framework 3
+   LFR4             Sequence of light framework 4
+   HFR1             Sequence of heavy framework 1
+   HFR2             Sequence of heavy framework 2
+   HFR3             Sequence of heavy framework 3
+   HFR4             Sequence of heavy framework 4
+   SEQuence[(file)] Create a numbered sequence file (of given name if 
+                    specified)
 
 (The required parts of field names are in capital letters)
 
@@ -466,6 +479,15 @@ The following properties are supported:
    IDLight         nnnnnn   The accession code for the light chain
    IDHeavy         nnnnnn   The accession code for the heavy chain
    SUBGroup(chain) string   The subgroup (currently only for human sequences)
+   DATe            The year of the earliest reference
+   LFR1            Sequence of light framework 1
+   LFR2            Sequence of light framework 2
+   LFR3            Sequence of light framework 3
+   LFR4            Sequence of light framework 4
+   HFR1            Sequence of heavy framework 1
+   HFR2            Sequence of heavy framework 2
+   HFR3            Sequence of heavy framework 3
+   HFR4            Sequence of heavy framework 4
 
 (The required parts of field names are in capital letters)
 nnnnnn represents a 6-digit accession code.
@@ -590,17 +612,17 @@ WHERE  light <> ''
 6. Loop Definitions
 ===================
 
-The SET LOOPS command allows one of the following three sets of loop
+The SET LOOPS command allows one of the following four sets of loop
 definitions to be selected:
 
-   Loop      Kabat         AbM            Chothia
-   ----      -----         ---            -------
-   L1        L24 -- L34    L24 -- L34     L24 -- L34
-   L2        L50 -- L56    L50 -- L56     L50 -- L56
-   L3        L89 -- L97    L89 -- L97     L89 -- L97
-   H1        H31 -- H35B   H26 -- H35B    H26 -- H32
-   H2        H50 -- H65    H50 -- H58     H52 -- H56
-   H3        H95 -- H102   H95 -- H102    H95 -- H102
+   Loop      Kabat         AbM            Chothia       Contact
+   ----      -----         ---            -------       -------
+   L1        L24 -- L34    L24 -- L34     L24 -- L34    L30 -- L36
+   L2        L50 -- L56    L50 -- L56     L50 -- L56    L46 -- L55
+   L3        L89 -- L97    L89 -- L97     L89 -- L97    L89 -- L96
+   H1        H31 -- H35B   H26 -- H35B    H26 -- H32    H30 -- H35B
+   H2        H50 -- H65    H50 -- H58     H52 -- H56    H47 -- H58
+   H3        H95 -- H102   H95 -- H102    H95 -- H102   H93 -- H101
 
 
 7. Standard Kabat Numbering
@@ -714,3 +736,10 @@ V2.16 07.05.96 Chothia data file can now use Chothia or Kabat numbering
 V2.17 29.05.96 Added SET CANONICAL
 V2.18 10.09.97 Added SUBGROUP(chain) (Chain is either L or H)
 V2.19 14.10.98 Added SET DELIMITER
+V2.20 28.05.99 Fixed core-dump bug in EatInitials()
+V2.21 13.07.00 Fixed long-standing bug preventing string equality 
+               comparison when a string contained a ' or "
+V2.22 31.07.00 Added Contact loop definitions
+V2.23 03.04.02 Added DATE
+V2.24 28.02.05 Added LFR1...HFR4
+V2.25 24.08.06 Added SEQUENCE

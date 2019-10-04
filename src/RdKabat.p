@@ -3,7 +3,7 @@ int ReadNextKabatEntry(FILE *fp, KABATENTRY *Kabat, BOOL *insert,
 ;
 void ClearKabatEntry(KABATENTRY *KabatEntry)
 ;
-int GetKabatOffset(char **table, char *label)
+int GetKabatOffset(char **table, char *label, int count)
 ;
 char **BuildKabatNumbering(KABATENTRY Kabat, BOOL OldFormat)
 ;

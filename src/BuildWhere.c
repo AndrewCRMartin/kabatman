@@ -3,20 +3,18 @@
    Program:    KabatMan
    File:       BuildWhere.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.25
+   Date:       24.08.06
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   Phone:      +44 (0) 1372 275775 (Home)
-   EMail:      martin@biochem.ucl.ac.uk
-               andrew@stagleys.demon.co.uk
+   EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
 
@@ -66,6 +64,10 @@
    V2.21 13.07.00 Fixed long-standing bug in SetWhereData() which meant
                   you couldn't do a string comparison with anything 
                   containing a ' or "
+   V2.22 31.07.00 Skipped
+   V2.23 03.04.02 Skipped
+   V2.24 28.02.05 GetWord() takes extra parameter
+   V2.25 24.08.06 Skipped
 
 *************************************************************************/
 /* Includes
@@ -101,6 +103,7 @@
    20.04.94 Original   By: ACRM
    22.06.95 Doubled length of word buffer
    23.06.95 Added missing return value
+   28.02.05 Added word length parameter to GetWord()
 */
 BOOL BuildWhere(char *buffer)
 {
@@ -111,7 +114,7 @@ BOOL BuildWhere(char *buffer)
    /* Step through the buffer pulling a word at a time out of the buffer*/
    do
    {
-      pch=GetWord(pch,word);
+      pch=GetWord(pch,word,2*MAXBUFF);
 
       if(upstrcmp(word,"WHERE"))  /* If the word is not `WHERE'         */
       {
@@ -119,7 +122,7 @@ BOOL BuildWhere(char *buffer)
          {
             if(error) return(FALSE);
             
-            pch = HandleWhereSubClause(pch,word,&error);
+            pch = HandleWhereSubClause(pch,word,&error,2*MAXBUFF);
             if(error) return(FALSE);
          }
       }  /* This was not `WHERE'                                        */
@@ -184,11 +187,13 @@ BOOL CheckForSetOper(char *word, BOOL *error)
 }
 
 /************************************************************************/
-/*>char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
+/*>char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
+                              int maxlength)
    -----------------------------------------------------------------
    Input:   char  *buffer      Current start of next word in buffer
             char  *word        The current word to be tested (modified on
                                exit)
+            int   maxlength    Maximum word length
    Output:  BOOL  *error       TRUE if an error occurred
    Returns: char  *            Pointer to start of next word in buffer 
                                after processing this sub-clause
@@ -200,8 +205,10 @@ BOOL CheckForSetOper(char *word, BOOL *error)
    places the data into the WHERE linked list
 
    20.04.94 Original    By: ACRM
+   28.02.05 Added maxlength and added word length parameter to GetWord()
 */
-char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
+char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
+                           int maxlength)
 {
    int   i;
    char  *pch = buffer;
@@ -242,7 +249,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
          FillParameter(gCurrentWhere->param, word);
          
          /* Now get the comparison to be performed                      */
-         pch = GetWord(pch,word);
+         pch = GetWord(pch,word,maxlength);
          if(!word[0] || !SetComparison(gCurrentWhere,word))
          {
             *error = TRUE;
@@ -250,7 +257,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error)
          }
                 
          /* Now get the data for comparison                             */
-         pch = GetWord(pch,word);
+         pch = GetWord(pch,word,maxlength);
 
          if(!word[0])
          {

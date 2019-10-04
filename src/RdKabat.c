@@ -3,20 +3,18 @@
    Program:    KabatMan
    File:       RdKabat.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.25
+   Date:       24.08.06
    Function:   Read data from a new format Kabat sequence file
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2006
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   Phone:      +44 (0) 1372 275775 (Home)
-   EMail:      martin@biochem.ucl.ac.uk
-               andrew@stagleys.demon.co.uk
+   EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
 
@@ -66,6 +64,11 @@
    V2.19 14.10.98 Skipped
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Skipped
+   V2.23 03.04.02 Added refdate stuff
+   V2.24 28.02.05 Skipped
+   V2.25 24.08.06 Modified GetKabatOffset() so it can return the label
+                  from the offset as well as the offset from the label
 
 *************************************************************************/
 /* Includes
@@ -439,6 +442,7 @@ static int InsertSeq(KABATENTRY *KabatEntry, char *resnum, int *i,
    17.03.94 Original    By: ACRM
    13.04.94 Changed name from ClearEntry()
    02.04.96 Added kadbid
+   03.04.02 Added refdate
 */
 void ClearKabatEntry(KABATENTRY *KabatEntry)
 {
@@ -457,16 +461,24 @@ void ClearKabatEntry(KABATENTRY *KabatEntry)
    KabatEntry->kabatseq[0]  = '\0';
    KabatEntry->sequence[0]  = '\0';
    KabatEntry->kadbid[0]    = '\0';
+   KabatEntry->refdate      = 9999;
 }
 
 
 
 /************************************************************************/
-/*>int GetKabatOffset(char **table, char *label)
-   ---------------------------------------------
+/*>int GetKabatOffset(char **table, char *label, int count)
+   --------------------------------------------------------
    Input:   char  *table    Lookup table or NULL (use internal tables)
-            char  *label    Label for which to search
+            int   count     <0 or offset for which to find the label
+   I/O      char  *label    If (count<0) this is the label for which to 
+                            search (input only)
+                            If (count>=0) the chain is taken from this
+                            label and the full label for the offset 
+                            specified in count is returned
    Returns: int             Offset into table (-1 if error)
+
+   If (count < 0):
 
    Finds the offset of a Kabat residue number into the sequence array.
    If the table is specified as NULL, the standard kabat tables will be
@@ -476,9 +488,21 @@ void ClearKabatEntry(KABATENTRY *KabatEntry)
    The label must be specified as <chain><number> (e.g. L27A), although
    the <chain> will be ignored if a table is specified.
 
+   If (count >= 0):
+
+   Takes the chain name from 'label'. Then works out the label for the
+   offset specified in 'count' and replaces 'label' with the full label.
+   Returns the offset into the table (same as the input 'count') or
+   (-1) if the count is outside the range of labels.
+
    22.04.94 Original    By: ACRM
+   24.08.06 Now takes an additional parameter, count. If count<0 then
+            the routine behaves as before. If count>=0 then this is the
+            offset and the routine takes the chain identier from 'label'
+            and replaces label with the full label for the specified
+            offset
 */
-int GetKabatOffset(char **table, char *label)
+int GetKabatOffset(char **table, char *label, int count)
 {
    static char *KabatLightNumbers[] = 
    {
@@ -514,31 +538,64 @@ int GetKabatOffset(char **table, char *label)
         *pch;
    int  i;
 
-   /* Upcase the input label                                            */
-   strncpy(buffer,label,16);
-   UPPER(buffer);
-   
-   /* Get the chain label out of the label                              */
-   chain = buffer[0];
-   pch   = buffer + 1;
-
-   if(table == NULL)  /* No table, use the internal one                 */
+   if(count < 0)
    {
-      table = (chain=='L' ? KabatLightNumbers : 
-              (chain=='H' ? KabatHeavyNumbers : NULL));
+      /* Upcase the input label                                         */
+      strncpy(buffer,label,16);
+      UPPER(buffer);
+      
+      /* Get the chain label out of the label                           */
+      chain = buffer[0];
+      pch   = buffer + 1;
+      
+      if(table == NULL)  /* No table, use the internal one              */
+      {
+         table = (chain=='L' ? KabatLightNumbers : 
+                  (chain=='H' ? KabatHeavyNumbers : NULL));
+      }
+      
+      if(table == NULL)  /* Illegal chain specifier                     */
+         return(-1);
+      
+      /* Search for this string and return offset into the table        */
+      for(i=0; table[i]!=NULL; i++)
+         if(!strcmp(table[i],pch))
+            return(i);
    }
-
-   if(table == NULL)  /* Illegal chain specifier                        */
-      return(-1);
-
-   /* Search for this string and return offset into the table           */
-   for(i=0; table[i]!=NULL; i++)
-      if(!strcmp(table[i],pch))
-         return(i);
+   else
+   {
+      /* Upcase the input label                                         */
+      strncpy(buffer,label,16);
+      UPPER(buffer);
+      
+      /* Get the chain label out of the label                           */
+      chain = buffer[0];
+      pch   = buffer + 1;
+      
+      if(table == NULL)  /* No table, use the internal one              */
+      {
+         table = (chain=='L' ? KabatLightNumbers : 
+                  (chain=='H' ? KabatHeavyNumbers : NULL));
+      }
+      
+      if(table == NULL)  /* Illegal chain specifier                     */
+         return(-1);
+      
+      /* Check the size of the table. If the count is less than the table
+         size, find the residue name and output it. Return the count
+      */
+      for(i=0; table[i]!=NULL; i++);
+      if(count < i)
+      {
+         strcpy(label, table[count]);
+         return(count);
+      }
+   }
       
    /* Not found, return (-1)                                            */
    return(-1);
 }
+
 
 /************************************************************************/
 /*>char **BuildKabatNumbering(KABATENTRY Kabat, BOOL OldFormat)
@@ -843,12 +900,13 @@ char *CreateKabatNumber(char *resnum, int offset)
             of Kabat database.
    02.04.96 Added KADBID and changed while to do/while since the
             KADBID stuff is in the buffer when we enter this routine
+   03.04.02 Added reading of earliest reference date into refdate
 */
 int ReadKabatEntry(FILE *fp, char *buffer, int bufflen, 
                    KABATENTRY *KabatEntry, BOOL *insert)
 {
    BOOL GotJournal = FALSE;
-   
+
    do
    {
       TERMINATE(buffer);
@@ -877,12 +935,51 @@ int ReadKabatEntry(FILE *fp, char *buffer, int bufflen,
       }
       else if(!strncmp(buffer,"AAREFJ    ",10))
       {
-         int len = strlen(KabatEntry->reference);
+         int  len     = strlen(KabatEntry->reference);
+         char *year_p = buffer+12;
+         int  pubdate;
+         BOOL GotDate = FALSE;
 
          strncat(KabatEntry->reference,buffer+12,LARGEBUFF-len);
          KabatEntry->reference[LARGEBUFF-1] = '\0';
 
          GotJournal = TRUE;
+
+         /* 03.04.02 Grab the year out of this reference                */
+         while(!GotDate && (year_p!=NULL) && *year_p)
+         {
+            /* Find the first occurrence of (                           */
+            if((year_p = strchr(year_p, '('))!=NULL)
+            {
+               /* See if there is a ) 5 characters on                   */
+               if((year_p+5) < (buffer+bufflen))
+               {
+                  if(*(year_p+5) == ')')
+                  {
+                     /* Set this to a null and read the intervening 
+                        characters as the date
+                     */
+                     *(year_p+5) = '\0';
+                     if(sscanf(year_p+1, "%d", &pubdate))
+                     {
+                        if(pubdate < KabatEntry->refdate)
+                        {
+                           KabatEntry->refdate = pubdate;
+                        }
+                        GotDate=TRUE;
+                     }
+                     else
+                     {
+                        year_p++;
+                     }
+                  }
+                  else
+                  {
+                     year_p++;
+                  }
+               }
+            }
+         }
       }
       else if(!strncmp(buffer,"ANNOTA SPEC",11))
       {
@@ -1090,7 +1187,7 @@ int ReadOldKabatEntry(FILE *fp, char *buffer, int bufflen,
 
 /************************************************************************/
 /*
-#define TEST_RDKABAT
+   #define TEST_RDKABAT
 */
 
 #ifdef TEST_RDKABAT
@@ -1101,7 +1198,7 @@ main()
    BOOL insert;
    KABATENTRY Kabat;
    
-   if((fp=fopen("problems.kabat","r"))!=NULL)
+   if((fp=fopen("test.kabat","r"))!=NULL)
    {
       while((len = ReadNextKabatEntry(fp, &Kabat, &insert, FALSE))!=0)
       {
@@ -1112,9 +1209,12 @@ main()
          else
          {
             printf("Entry:    %s\n",   Kabat.aaname);
+            printf("Date:     %d\n",   Kabat.refdate);
             printf("Sequence: %s\n\n", Kabat.sequence);
          }
       }
    }
 }
 #endif
+
+

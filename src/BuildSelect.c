@@ -3,20 +3,18 @@
    Program:    KabatMan
    File:       BuildSelect.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.25
+   Date:       24.08.06
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   Phone:      +44 (0) 1372 275775 (Home)
-   EMail:      martin@biochem.ucl.ac.uk
-               andrew@stagleys.demon.co.uk
+   EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
 
@@ -64,6 +62,10 @@
    V2.19 14.10.98 Skipped
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Skipped
+   V2.23 03.04.02 Skipped
+   V2.24 28.02.05 GetWord() takes extra parameter
+   V2.25 24.08.06 Skipped
 
 *************************************************************************/
 /* Includes
@@ -95,6 +97,7 @@
 
    20.04.94 Original   By: ACRM
    23.06.95 Added missing return value
+   28.02.05 Added word length parameter for GetWord()
 */
 BOOL BuildSelect(char *buffer)
 {
@@ -107,7 +110,7 @@ BOOL BuildSelect(char *buffer)
    /* Step through the buffer pulling a word at a time out of the buffer*/
    do
    {
-      pch=GetWord(pch,word);
+      pch=GetWord(pch,word,MAXBUFF);
 
       if(upstrcmp(word,"SELECT")) /* If the word is not `SELECT'        */
       {

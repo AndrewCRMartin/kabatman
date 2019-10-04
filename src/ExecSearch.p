@@ -34,3 +34,7 @@ void DoGetSubgroup(char *sequence, char *class, char *subgroup)
 ;
 void WriteAsPIR(FILE *fp, DATA *d)
 ;
+void FillFW(char *fwname, DATA *d, char *framework)
+;
+void WriteNumberedSequence(FILE *fp, DATA *d)
+;
