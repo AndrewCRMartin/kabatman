@@ -70,6 +70,7 @@
                   redirecting
    V2.19 14.10.98 The field delimiter now comes from gDelim instead of
                   being hardcoded - DisplaySearch()
+                  Fixed bug in DoGetSubgroup()
 
 *************************************************************************/
 /* Includes
@@ -1253,6 +1254,8 @@ void GetSubgroup(DATA *d, char *chain, char *subgroup)
    Deret's routine.
 
    09.09.97 Original   By: ACRM
+   14.10.98 Added check on blank sequence - previously a random choice
+            got assigned!
 */
 void DoGetSubgroup(char *sequence, char *class, char *subgroup)
 {
@@ -1260,6 +1263,14 @@ void DoGetSubgroup(char *sequence, char *class, char *subgroup)
    char localseq[LARGEBUFF];
    int  i, j;
    
+   /* 14.10.98 Set to blanks if the sequence is blank                   */
+   if(sequence[0] == '\0')
+   {
+      class[0]    = '\0';
+      subgroup[0] = '\0';
+      return;
+   }
+
    /* Copy the sequence, skipping - characters                          */
    for(i=0,j=0; sequence[i]; i++)
    {

@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.19
-   Date:       14.10.98
+   Version:    V2.20
+   Date:       28.05.99
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-9
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -85,6 +85,8 @@
    V2.18a 24.09.97 Fixed core-dump bug in ExecSearch.c
    V2.19 14.10.98 Added SET DELIMITER and check that a value is supplied
                   for SET commands
+   V2.20 28.05.99 Fixed core-dump bug in EatInitials() which failed if
+                  the input buffer was NULL
 
 *************************************************************************/
 /* Includes
@@ -203,12 +205,13 @@ not available.\n\n");
    10.09.97 V2.18
    24.09.97 V2.18a
    14.10.98 V2.19 Preceeds each line with a # if DoHash specified
+   28.05.99 V2.20
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.19\n");
+   printf("KabatMan V2.20\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
@@ -1609,10 +1612,14 @@ char *GetFullStopWord(char *buffer, char *word)
    commas or ampersands used to delimit the last author.
 
    11.07.94 Original    By: ACRM
+   28.05.99 Just return NULL if input buffer is NULL
 */
 char *EatInitials(char *buffer)
 {
    char *p;
+
+   if(buffer==NULL)
+      return(NULL);
    
    /* Step along until we hit a space or a comma                        */
    for(p=buffer; (*p!='\0' && *p!=' ' && *p!='\t' && *p!=','); p++) ;

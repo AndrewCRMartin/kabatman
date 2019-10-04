@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       kabatman.h
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Database program for reading Kabat sequence files
    
    Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
@@ -67,6 +67,7 @@
    V2.19 14.10.98 Added gDelim
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
 
 *************************************************************************/
 #ifndef _KABATMAN_H
@@ -146,6 +147,7 @@
 #define LOOP_KABAT      1        /* Loop definitions                    */
 #define LOOP_ABM        2
 #define LOOP_CHOTHIA    3
+#define LOOP_CONTACT    4
 
 #define CLASS_LAMBDA    1        /* Light chain classes                 */
 #define CLASS_KAPPA     2
@@ -213,7 +215,8 @@ typedef struct
    char *name,                 /* The loop name (L1,...)                */
         *KabatS,   *KabatE,    /* Kabat defintition (e.g. L24 L34)      */
         *AbMS,     *AbME,      /* AbM definition                        */
-        *ChothiaS, *ChothiaE;  /* Chothia definition                    */
+        *ChothiaS, *ChothiaE,  /* Chothia definition                    */
+        *ContactS, *ContactE;  /* Contact definitions                   */
 }  LOOP;
 
 typedef struct _chothia
@@ -277,12 +280,12 @@ FIELD gSetOper[]  =                         /* Link set oper names/nums */
    {  0,               0, NULL}
 }  ;
 LOOP gLoopDefs[]   = 
-{  {  "L1", "L24", "L34",  "L24", "L34",  "L24", "L34" },
-   {  "L2", "L50", "L56",  "L50", "L56",  "L50", "L56" },
-   {  "L3", "L89", "L97",  "L89", "L97",  "L89", "L97" },
-   {  "H1", "H31", "H35B", "H26", "H35B", "H26", "H32" },
-   {  "H2", "H50", "H65",  "H50", "H58",  "H52", "H56" },
-   {  "H3", "H95", "H102", "H95", "H102", "H95", "H102"},
+{  {  "L1", "L24", "L34",  "L24", "L34",  "L24", "L34",  "L30", "L36"},
+   {  "L2", "L50", "L56",  "L50", "L56",  "L50", "L56",  "L46", "L55"},
+   {  "L3", "L89", "L97",  "L89", "L97",  "L89", "L97",  "L89", "L96"},
+   {  "H1", "H31", "H35B", "H26", "H35B", "H26", "H32",  "H30", "H35B"},
+   {  "H2", "H50", "H65",  "H50", "H58",  "H52", "H56",  "H47", "H58"},
+   {  "H3", "H95", "H102", "H95", "H102", "H95", "H102", "H93", "H101"},
    {  NULL, NULL , NULL  , NULL , NULL  , NULL , NULL  }
 }  ;
    
