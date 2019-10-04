@@ -211,16 +211,17 @@ not available.\n\n");
    14.10.98 V2.19 Preceeds each line with a # if DoHash specified
    28.05.99 V2.20
    13.07.00 V2.21
+   31.07.00 V2.22
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.21\n");
+   printf("KabatMan V2.22\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
-   printf("Copyright (c) 1994-8, Dr. Andrew C.R. Martin, University \
+   printf("Copyright (c) 1994-2000, Dr. Andrew C.R. Martin, University \
 College London.\n");
    if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \

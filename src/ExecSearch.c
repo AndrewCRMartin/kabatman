@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.22
-   Date:       31.07.00
+   Version:    V2.23
+   Date:       03.04.02
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2002
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -15,8 +15,7 @@
                Gower Street,
                London.
    Phone:      +44 (0) 1372 275775 (Home)
-   EMail:      martin@biochem.ucl.ac.uk
-               andrew@stagleys.demon.co.uk
+   EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
 
@@ -74,6 +73,7 @@
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
    V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
+   V2.23 03.04.02 Added reference handling
 
 *************************************************************************/
 /* Includes
@@ -217,6 +217,7 @@ BOOL HandleLogical(WHERE *wh, int *StackDepth)
    11.05.94 Added Canonical class handling
    02.04.96 Added ID (Kadbid) handling
    10.09.97 Added subgroup handling
+   03.04.02 Added reference date
 */
 BOOL HandleMatch(WHERE *wh, int *StackDepth)
 {
@@ -358,6 +359,11 @@ information\n");
          d->active[(*StackDepth)-1] = DoStrTest(class,
                                                 wh->comparison, 
                                                 wh->data, FALSE);
+         break;
+      case FIELD_REFDATE:
+         if(!sscanf(wh->data,"%d",&idata)) idata=0; /* Get WHERE date   */
+         d->active[(*StackDepth)-1] = DoIntTest(d->refdate,
+                                                wh->comparison, idata);
          break;
       default:
          return(FALSE);
@@ -635,6 +641,7 @@ BOOL IsComplete(DATA *d)
    24.09.97 Added check that fpPIR != fp before closing
    14.10.98 Field delimiter now comes from gDelim instead of hard-coded
             Comment at end is introduced with a #
+   03.04.02 Added reference date
 */
 void DisplaySearch(FILE *fp, int StackDepth)
 {
@@ -784,6 +791,10 @@ void DisplaySearch(FILE *fp, int StackDepth)
             case FIELD_SUBGROUP:
                GetSubgroup(d,p->param,class);
                fprintf(fp,"%s",class);
+               GotPrint = TRUE;
+               break;
+            case FIELD_REFDATE:
+               fprintf(fp,"%d",d->refdate);
                GotPrint = TRUE;
                break;
             default:
