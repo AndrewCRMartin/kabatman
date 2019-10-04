@@ -7,7 +7,7 @@
    Date:       30.05.96
    Function:   Convert Kabat antibody numbering to Chothia numbering
    
-   Copyright:  (c) Dr. Andrew C. R. Martin 1996
+   Copyright:  (c) UCL / Dr. Andrew C. R. Martin 1996
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure & Modelling Unit,
                Department of Biochemistry & Molecular Biology,
@@ -17,7 +17,8 @@
                WC1E 6BT.
    Phone:      (Home) +44 (0)1372 275775
                (Work) +44 (0)171 419 3890
-   EMail:      INTERNET: martin@biochem.ucl.ac.uk
+   EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 

@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.17
-   Date:       29.05.96
+   Version:    V2.18
+   Date:       10.09.97
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-6
+   Copyright:  (c) Andrew C. R. Martin 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -80,6 +80,7 @@
    V2.16 07.05.96 ReadChothiaData() sets gCanonChothNum
    V2.17 29.05.96 ReadChothiaData() now frees any pre-existing data
                   Added SET CANONICAL
+   V2.18 10.09.97 New SUBGROUP field
 
 *************************************************************************/
 /* Includes
@@ -194,12 +195,13 @@ not available.\n\n");
    22.04.96 V2.15
    08.05.96 V2.16
    29.05.96 V2.17
+   10.09.97 V2.18
 */
 void DisplayCopyright(void)
 {
-   printf("\nKabatMan V2.17\n");
+   printf("\nKabatMan V2.18\n");
    printf("==============\n");
-   printf("Copyright (c) 1994-6, Dr. Andrew C.R. Martin, University \
+   printf("Copyright (c) 1994-7, Dr. Andrew C.R. Martin, University \
 College London.\n\n");
    printf("This program is copyright. Any copying without the permission \
 of the\n");

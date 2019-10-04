@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       RdKabat.h
    
-   Version:    V2.18
-   Date:       10.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Include file for using ReadNextKabatEntry()
    
-   Copyright:  (c) Andrew C. R. Martin, UCL 1994-7
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -15,6 +15,7 @@
                Gower Street,
                London.
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -59,6 +60,7 @@
    V2.16 08.05.96 Skipped
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
+   V2.19 14.10.98 Skipped
 
 *************************************************************************/
 #ifndef _RDKABAT_H

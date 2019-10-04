@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       RdKabat.c
    
-   Version:    V2.17
-   Date:       29.05.96
+   Version:    V2.18
+   Date:       10.09.97
    Function:   Read data from a new format Kabat sequence file
    
-   Copyright:  (c) Andrew C. R. Martin 1994-6
+   Copyright:  (c) Andrew C. R. Martin, UCL 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -61,6 +61,7 @@
    V2.15 22.04.96 Skipped
    V2.16 08.05.96 Skipped
    V2.17 29.05.96 Skipped
+   V2.18 10.09.97 Skipped
 
 *************************************************************************/
 /* Includes

@@ -3,13 +3,13 @@
    Program:    KabatMan
    File:       subgroup.c
    
-   Version:    V2.18
-   Date:       10.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Calculate human subgroup information
                This code modified from that kindly provided by
                Sophie Deret
    
-   Copyright:  (c) Sophie Deret, Andrew C. R. Martin, UCL 1997
+   Copyright:  (c) Sophie Deret / Andrew C. R. Martin / UCL 1997
    Author:     Sophie Deret, Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -18,6 +18,7 @@
                London.
    Phone:      +44 (0) 1372 275775 (Home)
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -42,6 +43,7 @@
    =================
    V2.18 10.09.97 This is the first version to include subgroup 
                   calculation
+   V2.19 14.10.98 Skipped
 
 *************************************************************************/
 /* Includes

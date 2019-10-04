@@ -7,7 +7,7 @@
    Date:       08.02.95
    Function:   Split Kabat new format database files into types
    
-   Copyright:  (c) Dr. Andrew C. R. Martin 1994
+   Copyright:  (c) UCL / Dr. Andrew C. R. Martin 1994-5
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure & Modelling Unit,
                Department of Biochemistry & Molecular Biology,
@@ -17,6 +17,7 @@
                WC1E 6BT.
    Phone:      (Home) +44 (0)1372 275775
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 

@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.17
-   Date:       29.05.96
+   Version:    V2.18
+   Date:       09.09.97
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-6
+   Copyright:  (c) Andrew C. R. Martin 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -63,6 +63,7 @@
    V2.16 08.05.96 FindCanonical() modified to allow Chothia numbering in
                   the Chothia data file
    V2.17 29.05.96 Skipped
+   V2.18 09.09.97 Added subgroup handling
 
 *************************************************************************/
 /* Includes
@@ -205,6 +206,7 @@ BOOL HandleLogical(WHERE *wh, int *StackDepth)
    27.04.94 Added L1...H3
    11.05.94 Added Canonical class handling
    02.04.96 Added ID (Kadbid) handling
+   10.09.97 Added subgroup handling
 */
 BOOL HandleMatch(WHERE *wh, int *StackDepth)
 {
@@ -341,7 +343,12 @@ information\n");
                                                 wh->comparison, 
                                                 wh->data, FALSE);
          break;
-         
+      case FIELD_SUBGROUP:
+         GetSubgroup(d,wh->param,class);
+         d->active[(*StackDepth)-1] = DoStrTest(class,
+                                                wh->comparison, 
+                                                wh->data, FALSE);
+         break;
       default:
          return(FALSE);
          break;
@@ -614,6 +621,7 @@ BOOL IsComplete(DATA *d)
    02.04.96 Added ID***** and URL***** handling
             Added gHTML varibale testing
    11.04.96 Writes dataset date with number of hits
+   10.09.97 Added subgroup
 */
 void DisplaySearch(FILE *fp, int StackDepth)
 {
@@ -757,7 +765,11 @@ void DisplaySearch(FILE *fp, int StackDepth)
                   fprintf(fp,"??????");
                GotPrint = TRUE;
                break;
-               
+            case FIELD_SUBGROUP:
+               GetSubgroup(d,p->param,class);
+               fprintf(fp,"%s",class);
+               GotPrint = TRUE;
+               break;
             default:
                break;
             }
@@ -1177,6 +1189,102 @@ BOOL TooSimilar(DATA *d, DATA *e, REAL Cutoff)
       return(FALSE);
 
    return(TRUE);
+}
+
+
+/************************************************************************/
+/*>void GetSubgroup(DATA *d, char *chain, char *subgroup)
+   ------------------------------------------------------
+   This is an interface to Sophie Deret's routine for finding the 
+   subgroup of a human sequence.
+
+
+*/
+void GetSubgroup(DATA *d, char *chain, char *subgroup)
+{
+   char class[16];
+
+   *chain = (islower(*chain) ? toupper(*chain) : *chain);
+   
+   if(!strncmp(d->source,"HUMAN",5))
+   {
+      if(*chain == 'L')
+      {
+         DoGetSubgroup(d->light, class, subgroup);
+         if(!strstr(d->class, class))
+            strcpy(subgroup,"?");
+      }
+      else if(*chain == 'H')
+      {
+         DoGetSubgroup(d->heavy, class, subgroup);
+      }
+   }
+   else
+   {
+      strcpy(subgroup,"?");
+   }
+}
+
+
+/************************************************************************/
+void DoGetSubgroup(char *sequence, char *class, char *subgroup)
+{
+   long classnum, sgpenum;
+   char localseq[LARGEBUFF];
+   int  i, j;
+   
+   /* Copy the sequence, skipping - characters                          */
+   for(i=0,j=0; sequence[i]; i++)
+   {
+      if(sequence[i] == '?')
+         localseq[j++] = 'X';
+      else if(sequence[i] != '-')
+         localseq[j++] = sequence[i];
+   }
+   localseq[j] = '\0';
+
+   /* Call Sophie Deret's code to find the class & subgroup             */
+   det_sgpe(localseq, &classnum, &sgpenum);
+
+   /* Change the class/subgroup number to text                          */
+   switch(classnum)
+   {
+   case 0:
+      strcpy(class,"HEAVY");
+      break;
+   case 1:
+      strcpy(class,"KAPPA");
+      break;
+   case 2:
+      strcpy(class,"LAMBDA");
+      break;
+   default:
+      strcpy(class,"?");
+   }
+
+   switch(sgpenum)
+   {
+   case 1:
+      strcpy(subgroup,"I");
+      break;
+   case 2:
+      strcpy(subgroup,"II");
+      break;
+   case 3:
+      strcpy(subgroup,"III");
+      break;
+   case 4:
+      strcpy(subgroup,"IV");
+      break;
+   case 5:
+      strcpy(subgroup,"V");
+      break;
+   case 6:
+      strcpy(subgroup,"VI");
+      break;
+   default:
+      strcpy(subgroup,"?");
+   }      
 }
 
 

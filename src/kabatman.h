@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.h
    
-   Version:    V2.17
-   Date:       29.05.96
+   Version:    V2.18
+   Date:       09.09.97
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-6
+   Copyright:  (c) Andrew C. R. Martin 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -62,6 +62,7 @@
    V2.15 22.04.96 Increased MAXCHOTHRES from 20
    V2.16 07.05.96 Added gCanonChothNum
    V2.17 29.05.96 Skipped
+   V2.18 09.09.97 Added FIELD_SUBGROUP
 
 *************************************************************************/
 #ifndef _KABATMAN_H
@@ -124,6 +125,7 @@
 #define FIELD_IDHEAVY   21
 #define FIELD_URLLIGHT  22
 #define FIELD_URLHEAVY  23
+#define FIELD_SUBGROUP  24
 
 #define OPER_AND        1        /* Types for logical set operators     */
 #define OPER_OR         2
@@ -260,6 +262,7 @@ FIELD gField[]    =                         /* Link field names/numbers */
    {  FIELD_IDHEAVY,   3, "IDHEAVY"},
    {  FIELD_URLLIGHT,  4, "URLLIGHT"},
    {  FIELD_URLHEAVY,  4, "URLHEAVY"},
+   {  FIELD_SUBGROUP,  4, "SUBGROUP"},
    {  0,               0, NULL}
 }  ;
 FIELD gSetOper[]  =                         /* Link set oper names/nums */

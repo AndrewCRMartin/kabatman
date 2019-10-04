@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       protos.h
    
-   Version:    V2.17
-   Date:       29.05.96
+   Version:    V2.18
+   Date:       10.09.97
    Function:   Include all prototype files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-6
+   Copyright:  (c) Andrew C. R. Martin, UCL 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
