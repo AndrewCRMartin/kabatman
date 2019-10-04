@@ -3,18 +3,17 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.23
-   Date:       03.04.00
+   Version:    V2.24
+   Date:       28.02.05
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2002
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2005
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
                University College,
                Gower Street,
                London.
-   Phone:      +44 (0) 1372 275775 (Home)
    EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
@@ -91,6 +90,8 @@
                   anything containing a ' or "
    V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
    V2.23 03.04.02 Added earliest reference date handling
+   V2.24 28.02.05 Added code to extract f/w regions in same way as CDRs
+                  GetWord() now takes extra parameter
 
 *************************************************************************/
 /* Includes
@@ -129,6 +130,7 @@ static BOOL doStoreData(DATA **pData, KABATENTRY *Kabat, DATA *extra,
    23.06.95 Removed redundant variables
    11.04.96 Initialise gFileDate
    14.10.98 DisplayCopyright() now takes a flag to introduce with #s
+   28.02.05 GetWord() now takes maximum word length
 */
 int main(int argc, char **argv)
 {
@@ -145,7 +147,7 @@ int main(int argc, char **argv)
    /* This causes GetWord() to return inverted commas as part of the
       words read out of the buffer. (Default mode is to strip them.)
    */
-   GetWord(NULL, NULL);
+   /*   GetWord(NULL, NULL, 0); */
 
    if(ParseCmdLine(argc, argv, &ForceRead))
    {
@@ -213,16 +215,17 @@ not available.\n\n");
    13.07.00 V2.21
    31.07.00 V2.22
    03.04.02 V2.23
+   28.02.05 V2.24
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.23\n");
+   printf("KabatMan V2.24\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
-   printf("Copyright (c) 1994-2002, Dr. Andrew C.R. Martin / University \
+   printf("Copyright (c) 1994-2005, Dr. Andrew C.R. Martin / University \
 College London / University of Reading.\n");
    if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \
@@ -653,6 +656,7 @@ Dr. Andrew C.R. Martin / UCL / University of Reading\n");
    30.06.94 Added OldFormat flag
    21.07.94 Made OldFormat global
    11.04.96 On skipped chains, also print accession code
+   28.02.05 GetWord() now takes max word length
 */
 BOOL ReadKabatData(char *FoF)
 {
@@ -706,9 +710,9 @@ BOOL ReadKabatData(char *FoF)
          
          /* Got a line specifying a group of files                      */
          p = buffer;
-         p = GetWord(p, HFile);
+         p = GetWord(p, HFile, 160);
          for(i=0; i<MAXLFILES; i++)
-            p = GetWord(p, LFile[i]);
+            p = GetWord(p, LFile[i], 160);
 
          /* Open these files                                            */
          if(HFile[0] && HFile[0] != '-')
@@ -1684,6 +1688,7 @@ void BuildFrom(char *buffer)
    14.10.98 Added SET DELIMiter {delim}
             Added check for value!
    31.07.00 Added LOOP definitions for Contact CDR definitions
+   28.02.05 GetWord() now takes max word length
 */
 void HandleSetCommand(char *buffer)
 {
@@ -1692,13 +1697,13 @@ void HandleSetCommand(char *buffer)
         *p = buffer;
    
    value[0] = '\0';
-   p = GetWord(p,word);
+   p = GetWord(p,word,MAXBUFF);
    do
    {
       if(upstrcmp(word,"SET"))
       {
          /* It's not `SET', so it's a variable name, so get the value   */
-         p = GetWord(p,value);
+         p = GetWord(p,value,MAXBUFF);
 
          /* Carry out required action for each variable                 */
          if(!upstrncmp(word,"LEVEL",5))
@@ -1803,7 +1808,7 @@ reading key residue file\n");
       }
 
       /* Get the next word out of the string                            */
-      p = GetWord(p,word);
+      p = GetWord(p,word,MAXBUFF);
    }  while(p!=NULL);
 
    /* 14.10.98 Added check that a value was specified!                  */
@@ -1837,6 +1842,7 @@ reading key residue file\n");
             keyword.
    29.05.96 Now frees any pre-existing data so this can be called
             multiple times.
+   28.02.05 GetWord() now takes max word length
 */
 BOOL ReadChothiaData(char *filename)
 {
@@ -1908,13 +1914,13 @@ BOOL ReadChothiaData(char *filename)
             if(p==NULL) return(FALSE);
             
             /* Strip out the word LOOP                                  */
-            chp = GetWord(buffer,word);
+            chp = GetWord(buffer,word,MAXBUFF);
             /* Get the loop id                                          */
-            chp = GetWord(chp,p->LoopID);
+            chp = GetWord(chp,p->LoopID,8);
             /* Get the class name                                       */
-            chp = GetWord(chp,p->class);
+            chp = GetWord(chp,p->class,8);
             /* Get the loop length                                      */
-            chp = GetWord(chp,word);
+            chp = GetWord(chp,word,MAXBUFF);
             sscanf(word,"%d",&(p->length));
             
             /* Set the resnum counter to zero                           */
@@ -1925,8 +1931,8 @@ BOOL ReadChothiaData(char *filename)
             /* Not the start of an entry, so must be a resid/type pair  */
             if(p!=NULL)
             {
-               chp = GetWord(buffer,p->resnum[count]);
-               chp = GetWord(chp,p->restype[count]);
+               chp = GetWord(buffer,p->resnum[count],8);
+               chp = GetWord(chp,p->restype[count],24);
                if(++count >= MAXCHOTHRES)
                {
                   fprintf(stderr,"Error: (Reading Chothia file) Too many \
