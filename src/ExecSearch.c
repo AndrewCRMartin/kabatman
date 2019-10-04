@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.19
-   Date:       14.10.98
+   Version:    V2.21
+   Date:       13.07.00
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -71,6 +71,8 @@
    V2.19 14.10.98 The field delimiter now comes from gDelim instead of
                   being hardcoded - DisplaySearch()
                   Fixed bug in DoGetSubgroup()
+   V2.20 xx.xx.xx Skipped
+   V2.21 13.07.00 Skipped
 
 *************************************************************************/
 /* Includes

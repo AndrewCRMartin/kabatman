@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.20
-   Date:       28.05.99
+   Version:    V2.21
+   Date:       13.07.00
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-9
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -87,6 +87,9 @@
                   for SET commands
    V2.20 28.05.99 Fixed core-dump bug in EatInitials() which failed if
                   the input buffer was NULL
+   V2.21 13.07.00 Fixed long-standing bug in BuildWhere/SetWhereData() 
+                  which meant you couldn't do a string comparison with 
+                  anything containing a ' or "
 
 *************************************************************************/
 /* Includes
@@ -206,12 +209,13 @@ not available.\n\n");
    24.09.97 V2.18a
    14.10.98 V2.19 Preceeds each line with a # if DoHash specified
    28.05.99 V2.20
+   13.07.00 V2.21
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.20\n");
+   printf("KabatMan V2.21\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
