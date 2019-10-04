@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.18
-   Date:       09.09.97
+   Version:    V2.18a
+   Date:       24.09.97
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin, UCL 1994-7
+   Copyright:  (c) Andrew C. R. Martin 1994-7
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -64,6 +64,9 @@
                   the Chothia data file
    V2.17 29.05.96 Skipped
    V2.18 09.09.97 Added subgroup handling
+   V2.18a 24.09.97 Fixed bug in DisplaySearch() - was ending up with the
+                  output file being closed twice if selecting PIR and
+                  redirecting
 
 *************************************************************************/
 /* Includes
@@ -622,6 +625,7 @@ BOOL IsComplete(DATA *d)
             Added gHTML varibale testing
    11.04.96 Writes dataset date with number of hits
    10.09.97 Added subgroup
+   24.09.97 Added check that fpPIR != fp before closing
 */
 void DisplaySearch(FILE *fp, int StackDepth)
 {
@@ -783,7 +787,7 @@ void DisplaySearch(FILE *fp, int StackDepth)
            NHits,gFileDate);
    if(gHTML) fprintf(fp,"</i><p>\n");
 
-   if(fpPIR!=NULL && fpPIR!=stdout)
+   if(fpPIR!=NULL && fpPIR!=stdout && fpPIR!=fp)
       fclose(fpPIR);
    fpPIR = NULL;
 }
@@ -1356,5 +1360,3 @@ void WriteAsPIR(FILE *fp, DATA *d)
       fprintf(fp,"*\n");
    }
 }
-
-

@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       RdKabat.h
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Include file for using ReadNextKabatEntry()
    
    Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
@@ -63,6 +63,7 @@
    V2.19 14.10.98 Skipped
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Skipped
 
 *************************************************************************/
 #ifndef _RDKABAT_H

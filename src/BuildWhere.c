@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       BuildWhere.c
    
-   Version:    V2.19
-   Date:       14.10.98
+   Version:    V2.21
+   Date:       13.07.00
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -62,6 +62,10 @@
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
    V2.19 14.10.98 Skipped
+   V2.20 xx.xx.xx Skipped
+   V2.21 13.07.00 Fixed long-standing bug in SetWhereData() which meant
+                  you couldn't do a string comparison with anything 
+                  containing a ' or "
 
 *************************************************************************/
 /* Includes
@@ -347,21 +351,47 @@ BOOL SetComparison(WHERE *p, char *word)
    trailing ' or "
 
    20.04.94 Original    By: ACRM
+   13.07.00 The check for trailing ' or " was actually stopping the string
+            at the first occurrence rather than the last. Fixed this!
 */
 void SetWhereData(WHERE *wh, char *word)
 {  
    char *p;
+   int  len;
    
-   /* Skip any leading ' or "                                           */
-   for(p=word; *p=='"' || *p=='\''; p++) ;
-
-   strcpy(wh->data,p);
-
-   /* Terminate copied data at ' or "                                   */
-   if((p=strchr(wh->data,'"'))!=NULL)
-      *p = '\0';
-   if((p=strchr(wh->data,'\''))!=NULL)
-      *p = '\0';
+   /* If the first character is a ' or " then skip it and end the string at
+      the last ' or "
+   */
+   if(word[0] == '"')
+   {
+      strcpy(wh->data, word+1);
+      len = strlen(wh->data);
+      for(p=wh->data + len-1; p>=wh->data; p--)
+      {
+         if(*p=='"')
+         {
+            *p = '\0';
+            break;
+         }
+      }
+   }
+   else if(word[0] == '\'')
+   {
+      strcpy(wh->data, word+1);
+      len = strlen(wh->data);
+      for(p=wh->data + len-1; p>=wh->data; p--)
+      {
+         if(*p=='\'')
+         {
+            *p = '\0';
+            break;
+         }
+      }
+   }
+   else
+   {
+      strcpy(wh->data, word);
+   }
 }
 
 /************************************************************************/

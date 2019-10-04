@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.h
    
-   Version:    V2.18
-   Date:       09.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin,UCL 1994-7
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -15,6 +15,7 @@
                Gower Street,
                London.
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -63,6 +64,7 @@
    V2.16 07.05.96 Added gCanonChothNum
    V2.17 29.05.96 Skipped
    V2.18 09.09.97 Added FIELD_SUBGROUP
+   V2.19 14.10.98 Added gDelim
 
 *************************************************************************/
 #ifndef _KABATMAN_H
@@ -231,7 +233,8 @@ char  **gFlagList = NULL,
       gKabatFile[MAXBUFF],
       gChothiaFile[MAXBUFF],
       gFileDate[MAXBUFF],
-      gURLFormat[MAXBUFF];
+      gURLFormat[MAXBUFF],
+      gDelim      = ',';
 DATA  *gData      = NULL;                   /* Kabat data linked list   */
 int   gInfoLevel  = DEF_INFO,               /* Information level        */
       gLoopMode   = LOOP_KABAT;             /* Loop definition mode     */
@@ -296,7 +299,8 @@ extern char      **gFlagList,
                  gKabatFile[MAXBUFF],
                  gChothiaFile[MAXBUFF],
                  gFileDate[MAXBUFF],
-                 gURLFormat[MAXBUFF];
+                 gURLFormat[MAXBUFF],
+                 gDelim;
 extern DATA      *gData;
 extern int       gInfoLevel,
                  gLoopMode;
