@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       subgroup.c
    
-   Version:    V2.19
-   Date:       14.10.98
+   Version:    V2.21
+   Date:       13.07.00
    Function:   Calculate human subgroup information
                This code modified from that kindly provided by
                Sophie Deret
@@ -44,6 +44,8 @@
    V2.18 10.09.97 This is the first version to include subgroup 
                   calculation
    V2.19 14.10.98 Skipped
+   V2.20 xx.xx.xx Skipped
+   V2.21 13.07.00 Skipped
 
 *************************************************************************/
 /* Includes

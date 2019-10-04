@@ -10,9 +10,9 @@ LIBS   = -lm
 ANSI   = ansi -p
 EXE    = kabatman
 OFILES = kabatman.o RdKabat.o libroutines.o BuildSelect.o BuildWhere.o \
-         ExecSearch.o KabCho.o subgroup.o
+         ExecSearch.o KabCho.o
 PFILES = kabatman.p RdKabat.p libroutines.p BuildSelect.p BuildWhere.p \
-         ExecSearch.p KabCho.p subgroup.p
+         ExecSearch.p KabCho.p
 
 
 all    : $(EXE) splitkabat
