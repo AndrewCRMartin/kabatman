@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.22
-   Date:       31.07.00
+   Version:    V2.23
+   Date:       03.04.00
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2002
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -15,8 +15,7 @@
                Gower Street,
                London.
    Phone:      +44 (0) 1372 275775 (Home)
-   EMail:      martin@biochem.ucl.ac.uk
-               andrew@stagleys.demon.co.uk
+   EMail:      andrew@bioinf.org.uk
                
 **************************************************************************
 
@@ -91,6 +90,7 @@
                   which meant you couldn't do a string comparison with 
                   anything containing a ' or "
    V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
+   V2.23 03.04.02 Added earliest reference date handling
 
 *************************************************************************/
 /* Includes
@@ -212,17 +212,18 @@ not available.\n\n");
    28.05.99 V2.20
    13.07.00 V2.21
    31.07.00 V2.22
+   03.04.02 V2.23
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.22\n");
+   printf("KabatMan V2.23\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
-   printf("Copyright (c) 1994-2000, Dr. Andrew C.R. Martin, University \
-College London.\n");
+   printf("Copyright (c) 1994-2002, Dr. Andrew C.R. Martin / University \
+College London / University of Reading.\n");
    if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \
 of the\n");
@@ -329,6 +330,7 @@ BOOL ParseCmdLine(int argc, char **argv, BOOL *ForceRead)
    02.04.96 Added idlight & idheavy
    11.04.96 Skip comment lines from start of file, but reads date from
             them if found
+   03.04.02 Added reference date reading
 */
 BOOL ReadStoredData(char *filename)
 {
@@ -432,6 +434,10 @@ data.\n");
          strcpy(p->reference,  buffer);
          break;
       case 7:
+         if(!sscanf(buffer, "%d", &(p->refdate)) || (p->refdate == 0))
+            p->refdate = 9999;
+         break;
+      case 8:
          if(buffer[0] != '*')
          {
             /* We've got a special numbering scheme                     */
@@ -443,7 +449,7 @@ Kabat numbering of stored data\n");
             }
          }
          break;
-      case 8:
+      case 9:
          if(buffer[0] != '*')
          {
             /* We've got a special numbering scheme                     */
@@ -455,16 +461,16 @@ Kabat numbering of stored data\n");
             }
          }
          break;
-      case 9:
+      case 10:
          strcpy(p->light,      buffer);
          break;
-      case 10:
+      case 11:
          strcpy(p->heavy,      buffer);
          break;
-      case 11:
+      case 12:
          strcpy(p->idlight,    buffer);
          break;
-      case 12:
+      case 13:
          strcpy(p->idheavy,    buffer);
          break;
       default:
@@ -553,6 +559,7 @@ char **ReadSpecialNumbering(char *buffer)
    02.04.96 Added idlight & idheavy
    11.04.96 Writes comment lines at the top which include the date of
             writing and the file format version
+   03.04.02 Added refdate field. Bumped file version number
 */
 BOOL StoreKabatData(char *filename)
 {
@@ -576,9 +583,9 @@ BOOL StoreKabatData(char *filename)
 
       /* Put a header into the file including a date stamp              */
       fprintf(fp,"! KabatMan data file.\n");
-      fprintf(fp,"! KabatMan is Copyright 1994-6, \
-Dr. Andrew C.R. Martin, UCL\n");
-      fprintf(fp,"! FILE VERSION: 3.0\n");
+      fprintf(fp,"! KabatMan is Copyright 1994-2002, \
+Dr. Andrew C.R. Martin / UCL / University of Reading\n");
+      fprintf(fp,"! FILE VERSION: 4.0\n");
       fprintf(fp,"! CREATION DATE: %s\n",gFileDate);
       fprintf(fp,"!\n");
       
@@ -591,6 +598,7 @@ Dr. Andrew C.R. Martin, UCL\n");
          fprintf(fp,"%s\n",p->class);
          fprintf(fp,"%s\n",p->antigen);
          fprintf(fp,"%s\n",p->reference);
+         fprintf(fp,"%d\n",p->refdate);
 
          if(p->LNumbers)
          {
@@ -1144,6 +1152,7 @@ DATA *StoreUnmatchedL(DATA *Data, DATA *KabL[], int NLFile, char *source)
    18.07.94 Copies into source as well as fsource
    21.07.94 Added gOldFormat flag to calls to BuildKabatNumbering()
    02.04.96 Added kadbid
+   03.04.02 Added refdate
 */
 void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain, 
                      BOOL GotInsert)
@@ -1155,6 +1164,7 @@ void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain,
    strcpy(p->source,     Kabat.source);
    strcpy(p->reference,  Kabat.reference);
 
+   p->refdate   = Kabat.refdate;
    p->active[0] = FALSE;
 
    if(chain=='l' || chain=='L')
@@ -1187,6 +1197,7 @@ void CopyKabatToData(DATA *p, KABATENTRY Kabat, char chain,
    22.04.94 Added LNumbers & HNumbers
    21.07.94 Fixed LNumbers and HNumbers only to be copied if needed (!)
    02.04.96 Added kadbid
+   03.04.02 Added refdate
 */
 void CopyDataToData(DATA *p, DATA *extra, char chain)
 {
@@ -1197,6 +1208,7 @@ void CopyDataToData(DATA *p, DATA *extra, char chain)
    strcpy(p->fsource,    extra->fsource);
    strcpy(p->reference,  extra->reference);
 
+   p->refdate   = extra->refdate;
    p->active[0] = FALSE;
 
    if(chain=='l' || chain=='L')
