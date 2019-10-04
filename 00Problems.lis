@@ -1,0 +1,19 @@
+A number of entries contain the name ''CL rather than 'CL
+Is this correct? Can these be paired with the corresponding chain
+having 'CL (e.g. 3-13'CL light & 3-13''CL heavy)?
+
+Some entries with insertions don't have ANNOTA AAIN records, just
+ANNOTA AANT (e.g. 027820, 027821)
+
+Some sequences end up with multiple entries in the database. In
+principle this is correct because they are paired with multiple
+partner chains. Known examples are all light chains:
+020112
+034242
+019751
+029917
+004781
+However, would be good to have a DISTINCT keyword in searches
+
+Problem 02.12.11
+007779 - this has an AAIN at 39 but it comes up as a ? in the sequence

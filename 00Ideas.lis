@@ -1,0 +1,5 @@
+Add a new command to review the current select and where statements
+Add subgroup info from SUBIM while populating database
+Add distrib() command for residue positions.
+Modify QueryStrStr() in Bioplib do allow escaping of wildcards
+

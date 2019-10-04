@@ -1,0 +1,15 @@
+
+
+
+
+http://immuno.bme.nwu.edu/cgi-bin/wwwscripts/noninter.tcl?qt=XXXXXX
+
+where XXXXXX is the 6 digit number.  Like:
+
+http://immuno.bme.nwu.edu/cgi-bin/wwwscripts/noninter.tcl?qt=000111
+
+27.01.98
+
+The URL is now:
+http://immuno.bme.nwu.edu/scripts/noninter.tcl?qt=XXXXXX
+

@@ -1,0 +1,75 @@
+#!/bin/sh
+# Short script to copy the required files from bioplib for creation
+# of a distribution version of KabatMan
+# V1.0  10.05.94 By: ACRM
+# V1.1  11.05.94 Added general.h
+# V1.2  13.05.94 Code only
+# V2.0  07.07.94 Code only
+# V2.3  25.01.95 Code and separate src directory
+# V2.5  10.03.95 Code and now copies patchkabat.perl
+
+BIOP=/home/amartin/bioplib/src
+KABMAN=KabManV2.25
+KABSRC=$KABMAN/src
+KMBIOP=$KABSRC/bioplib
+
+# Create subdirectories
+if [ -d $KABMAN ]
+then
+   echo "Got KabatMan directory"
+else
+   echo "Creating KabatMan directory"
+   mkdir $KABMAN
+fi
+
+if [ -d $KABSRC ] 
+then
+   echo "Got source sub-directory"
+else
+   echo "Creating source sub-directory"
+   mkdir $KABSRC
+fi
+
+if [ -d $KMBIOP ] 
+then
+   echo "Got bioplib sub-directory"
+else
+   echo "Creating bioplib sub-directory"
+   mkdir $KMBIOP
+fi
+
+# Copy bioplib files into directory
+cp ${BIOP}/SysDefs.h  $KMBIOP
+cp ${BIOP}/macros.h   $KMBIOP
+cp ${BIOP}/seq.h      $KMBIOP
+cp ${BIOP}/pdb.h      $KMBIOP
+cp ${BIOP}/MathType.h $KMBIOP
+cp ${BIOP}/general.h  $KMBIOP
+
+# Copy source code into directory
+cp ./src/*.c ./src/*.h ./src/*.p  $KABSRC
+
+# Copy documentation into directory
+cp *.doc              $KABMAN
+cp licence.txt        $KABMAN
+
+# Copy in the patchkabat program
+cp patchkabat.perl    $KABMAN
+
+# Copy distribution specials into directory
+cp ./src/distspecial/*.dat*   $KABMAN
+cp ./src/distspecial/*.fof    $KABMAN
+cp ./src/distspecial/*.c      $KABSRC
+cp ./src/distspecial/*.h      $KABSRC
+cp ./src/distspecial/*.p      $KABSRC
+cp ./src/distspecial/makefile $KABSRC
+
+
+# Tar up the distribution directory
+tar -cvf ${KABMAN}.tar $KABMAN
+gzip ${KABMAN}.tar
+
+# and finally delete the directory
+/bin/rm -rf $KABMAN
+
+

@@ -1,0 +1,22 @@
+These files are used to post process mirrored data
+--------------------------------------------------
+
+Kabat
+=====
+The kabat mirror calls a program called
+        buildkabat.sh
+to use as its mail program to inform of new data having arrived. Instead this
+script does all the processing of the new data to rebuild the KabatMan data.
+
+buildkabat.sh uses:
+1. InsertUpdate.perl to move any files from the "updates" directory to their 
+   required locations
+2. BuildFOF.perl to create a file of files for KabatMan
+3. updatestats.perl to update the Web page 
+
+
+
+Finally, the script
+        installkabat.sh 
+should be run manually to install the new data.
+
