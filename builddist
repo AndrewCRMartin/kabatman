@@ -9,7 +9,7 @@
 # V2.5  10.03.95 Code and now copies patchkabat.perl
 
 BIOP=${HOME}/git/bioplib/src
-KABMAN=KabManV2.25
+KABMAN=KabManV2.26
 KABSRC=$KABMAN/src
 KMBIOP=$KABSRC/bioplib
 
@@ -39,14 +39,25 @@ else
 fi
 
 # Copy bioplib files into directory
-cp ${BIOP}/SysDefs.h    $KMBIOP
-cp ${BIOP}/macros.h     $KMBIOP
-cp ${BIOP}/seq.h        $KMBIOP
-cp ${BIOP}/pdb.h        $KMBIOP
-cp ${BIOP}/MathType.h   $KMBIOP
-cp ${BIOP}/general.h    $KMBIOP
-cp ${BIOP}/deprecated.h $KMBIOP
-cp ${BIOP}/hash.h       $KMBIOP
+cp ${BIOP}/array2.c       $KMBIOP
+cp ${BIOP}/array.h        $KMBIOP
+cp ${BIOP}/deprecated.h   $KMBIOP
+cp ${BIOP}/DNAtoAA.c      $KMBIOP
+cp ${BIOP}/general.h      $KMBIOP
+cp ${BIOP}/GetFilestem.c  $KMBIOP
+cp ${BIOP}/GetWord.c      $KMBIOP
+cp ${BIOP}/hash.h         $KMBIOP
+cp ${BIOP}/KnownSeqLen.c  $KMBIOP
+cp ${BIOP}/macros.h       $KMBIOP
+cp ${BIOP}/MathType.h     $KMBIOP
+cp ${BIOP}/pdb.h          $KMBIOP
+cp ${BIOP}/QueryStrStr.c  $KMBIOP
+cp ${BIOP}/seq.h          $KMBIOP
+cp ${BIOP}/SysDefs.h      $KMBIOP
+cp ${BIOP}/throne.c       $KMBIOP
+cp ${BIOP}/TrueSeqLen.c   $KMBIOP
+cp ${BIOP}/upstrcmp.c     $KMBIOP
+cp ${BIOP}/upstrncmp.c    $KMBIOP
 
 # Copy source code into directory
 cp ./src/*.c ./src/*.h ./src/*.p  $KABSRC
@@ -59,13 +70,9 @@ cp licence.txt        $KABMAN
 cp patchkabat.perl    $KABMAN
 
 # Copy distribution specials into directory
-cp ./src/distspecial/*.dat*   $KABMAN
-cp ./src/distspecial/*.fof    $KABMAN
-cp ./src/distspecial/*.c      $KABSRC
-cp ./src/distspecial/*.h      $KABSRC
-cp ./src/distspecial/*.p      $KABSRC
-cp ./src/distspecial/makefile $KABSRC
-
+cp ./data/*.dat*       $KABMAN
+cp *.fof               $KABMAN
+cp ./src/Makefile.dist $KABSRC/Makefile
 
 # Tar up the distribution directory
 tar -cvf ${KABMAN}.tar $KABMAN

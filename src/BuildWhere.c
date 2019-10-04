@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       BuildWhere.c
    
-   Version:    V2.25
-   Date:       24.08.06
+   Version:    V2.26
+   Date:       05.10.19
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2019
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -66,8 +66,9 @@
                   containing a ' or "
    V2.22 31.07.00 Skipped
    V2.23 03.04.02 Skipped
-   V2.24 28.02.05 GetWord() takes extra parameter
+   V2.24 28.02.05 blGetWord() takes extra parameter
    V2.25 24.08.06 Skipped
+   V2.26 04.10.19 Changed all bioplib calls to blXXX()
 
 *************************************************************************/
 /* Includes
@@ -103,7 +104,7 @@
    20.04.94 Original   By: ACRM
    22.06.95 Doubled length of word buffer
    23.06.95 Added missing return value
-   28.02.05 Added word length parameter to GetWord()
+   28.02.05 Added word length parameter to blGetWord()
 */
 BOOL BuildWhere(char *buffer)
 {
@@ -114,9 +115,9 @@ BOOL BuildWhere(char *buffer)
    /* Step through the buffer pulling a word at a time out of the buffer*/
    do
    {
-      pch=GetWord(pch,word,2*MAXBUFF);
+      pch=blGetWord(pch,word,2*MAXBUFF);
 
-      if(upstrcmp(word,"WHERE"))  /* If the word is not `WHERE'         */
+      if(blUpstrcmp(word,"WHERE"))  /* If the word is not `WHERE'         */
       {
          if(!CheckForSetOper(word, &error))
          {
@@ -152,7 +153,7 @@ BOOL CheckForSetOper(char *word, BOOL *error)
    /* Run through the list of logical set operators                     */
    for(i=0; gSetOper[i].type; i++)
    {
-      if(!upstrncmp(word,gSetOper[i].name,gSetOper[i].length))
+      if(!blUpstrncmp(word,gSetOper[i].name,gSetOper[i].length))
       {
          /* We've got a match in our array of fields, so allocate 
             the next entry in our linked list of selections.
@@ -205,7 +206,7 @@ BOOL CheckForSetOper(char *word, BOOL *error)
    places the data into the WHERE linked list
 
    20.04.94 Original    By: ACRM
-   28.02.05 Added maxlength and added word length parameter to GetWord()
+   28.02.05 Added maxlength and added word length parameter to blGetWord()
 */
 char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
                            int maxlength)
@@ -218,7 +219,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
    /* Run through the field list to see if we get a match               */
    for(i=0; gField[i].type; i++)
    {
-      if(!upstrncmp(word,gField[i].name,gField[i].length))
+      if(!blUpstrncmp(word,gField[i].name,gField[i].length))
       {
          /* We've got a match in our array of fields, so allocate 
             the next entry in our linked list of selections.
@@ -249,7 +250,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
          FillParameter(gCurrentWhere->param, word);
          
          /* Now get the comparison to be performed                      */
-         pch = GetWord(pch,word,maxlength);
+         pch = blGetWord(pch,word,maxlength);
          if(!word[0] || !SetComparison(gCurrentWhere,word))
          {
             *error = TRUE;
@@ -257,7 +258,7 @@ char *HandleWhereSubClause(char *buffer, char *word, BOOL *error,
          }
                 
          /* Now get the data for comparison                             */
-         pch = GetWord(pch,word,maxlength);
+         pch = blGetWord(pch,word,maxlength);
 
          if(!word[0])
          {

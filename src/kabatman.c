@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.25
-   Date:       24.08.06
+   Version:    V2.26
+   Date:       04.10.19
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2006
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2019
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -91,9 +91,10 @@
    V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
    V2.23 03.04.02 Added earliest reference date handling
    V2.24 28.02.05 Added code to extract f/w regions in same way as CDRs
-                  GetWord() now takes extra parameter
+                  blGetWord() now takes extra parameter
    V2.25 24.08.06 Added SEQUENCE option which works like PIR, but writes
                   a numbered sequence file
+   V2.26 04.10.19 Changed all bioplib calls to blXXX()
 
 *************************************************************************/
 /* Includes
@@ -126,13 +127,13 @@ static BOOL doStoreData(DATA **pData, KABATENTRY *Kabat, DATA *extra,
    14.04.94 Rewritten
    26.04.94 Added command line handling
    27.04.94 Added call to DisplayCopyright()
-   11.05.94 Added initialisation call to GetWord() to switch on comma mode
+   11.05.94 Added initialisation call to blGetWord() to switch on comma mode
    30.06.94 Added OldFormat flag
    21.07.94 Made OldFormat global
    23.06.95 Removed redundant variables
    11.04.96 Initialise gFileDate
    14.10.98 DisplayCopyright() now takes a flag to introduce with #s
-   28.02.05 GetWord() now takes maximum word length
+   28.02.05 blGetWord() now takes maximum word length
 */
 int main(int argc, char **argv)
 {
@@ -146,10 +147,10 @@ int main(int argc, char **argv)
    gOldFormat         = FALSE;
    gFileDate[0]       = '\0';
 
-   /* This causes GetWord() to return inverted commas as part of the
+   /* This causes blGetWord() to return inverted commas as part of the
       words read out of the buffer. (Default mode is to strip them.)
    */
-   /*   GetWord(NULL, NULL, 0); */
+   /*   blGetWord(NULL, NULL, 0); */
 
    if(ParseCmdLine(argc, argv, &ForceRead))
    {
@@ -219,16 +220,17 @@ not available.\n\n");
    03.04.02 V2.23
    28.02.05 V2.24
    24.08.06 V2.25
+   04.10.19 V2.26
 */
 void DisplayCopyright(BOOL DoHash)
 {
    printf("\n");
    if(DoHash) printf("# ");
-   printf("KabatMan V2.25\n");
+   printf("KabatMan V2.26\n");
    if(DoHash) printf("# ");
    printf("==============\n");
    if(DoHash) printf("# ");
-   printf("Copyright (c) 1994-2006, Dr. Andrew C.R. Martin / University \
+   printf("Copyright (c) 1994-2019, Dr. Andrew C.R. Martin / University \
 College London / University of Reading.\n");
    if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \
@@ -659,7 +661,7 @@ Dr. Andrew C.R. Martin / UCL / University of Reading\n");
    30.06.94 Added OldFormat flag
    21.07.94 Made OldFormat global
    11.04.96 On skipped chains, also print accession code
-   28.02.05 GetWord() now takes max word length
+   28.02.05 blGetWord() now takes max word length
 */
 BOOL ReadKabatData(char *FoF)
 {
@@ -713,9 +715,9 @@ BOOL ReadKabatData(char *FoF)
          
          /* Got a line specifying a group of files                      */
          p = buffer;
-         p = GetWord(p, HFile, 160);
+         p = blGetWord(p, HFile, 160);
          for(i=0; i<MAXLFILES; i++)
-            p = GetWord(p, LFile[i], 160);
+            p = blGetWord(p, LFile[i], 160);
 
          /* Open these files                                            */
          if(HFile[0] && HFile[0] != '-')
@@ -1015,7 +1017,7 @@ static BOOL doStoreData(DATA **pData, KABATENTRY *Kabat, DATA *extra,
 
    if(Kabat != NULL || extra != NULL)
    {
-      if(source != NULL && upstrncmp(source,"VARIOUS",7))
+      if(source != NULL && blUpstrncmp(source,"VARIOUS",7))
          strcpy(p->source, source);
       
       UPPER(p->source);
@@ -1303,7 +1305,7 @@ BOOL ReadLFiles(FILE *fpL[], int NLFile, DATA *KabatLData[], char *source,
             CopyKabatToData(p, KabatEntry, 'L', GotInsert);
 
             /* Only copy source from filename if not VARIOUS            */
-            if(upstrncmp(source,"VARIOUS",7))
+            if(blUpstrncmp(source,"VARIOUS",7))
                strcpy(p->source, source);
             
             UPPER(p->source);
@@ -1339,7 +1341,7 @@ void GetSource(char *filename, char *source)
 {
    char *p;
    
-   GetFilestem(filename, source);
+   blGetFilestem(filename, source);
    if((p=strchr(source,'.')) != NULL)
       *p = '\0';
    if((p=strchr(source,'_')) != NULL)
@@ -1395,31 +1397,31 @@ void CommandLoop(void)
       else
       {
          /* See if we're entering a new mode                            */
-         if(!upstrncmp(p,"SET",3))
+         if(!blUpstrncmp(p,"SET",3))
          {
             if(Mode != 0)
                fprintf(stderr,"SET only allowed at main prompt\n");
             else
                HandleSetCommand(p);
          }
-         else if(!upstrncmp(p,"SELECT",6))
+         else if(!blUpstrncmp(p,"SELECT",6))
          {
             Mode = 1;
             ClearSelect();
             BuildSelect(p);
          }
-         else if(!upstrncmp(p,"WHERE",5))
+         else if(!blUpstrncmp(p,"WHERE",5))
          {
             Mode = 2;
             ClearWhere();
             BuildWhere(p);
          }
-         else if(!upstrncmp(p,"FROM",4))
+         else if(!blUpstrncmp(p,"FROM",4))
          {
             Mode = 3;
             BuildFrom(p);
          }
-         else if(!upstrncmp(p,"QUIT",4) || !upstrncmp(p,"EXIT",4))
+         else if(!blUpstrncmp(p,"QUIT",4) || !blUpstrncmp(p,"EXIT",4))
          {
             ClearSelect();
             ClearWhere();
@@ -1691,7 +1693,7 @@ void BuildFrom(char *buffer)
    14.10.98 Added SET DELIMiter {delim}
             Added check for value!
    31.07.00 Added LOOP definitions for Contact CDR definitions
-   28.02.05 GetWord() now takes max word length
+   28.02.05 blGetWord() now takes max word length
 */
 void HandleSetCommand(char *buffer)
 {
@@ -1700,57 +1702,57 @@ void HandleSetCommand(char *buffer)
         *p = buffer;
    
    value[0] = '\0';
-   p = GetWord(p,word,MAXBUFF);
+   p = blGetWord(p,word,MAXBUFF);
    do
    {
-      if(upstrcmp(word,"SET"))
+      if(blUpstrcmp(word,"SET"))
       {
          /* It's not `SET', so it's a variable name, so get the value   */
-         p = GetWord(p,value,MAXBUFF);
+         p = blGetWord(p,value,MAXBUFF);
 
          /* Carry out required action for each variable                 */
-         if(!upstrncmp(word,"LEVEL",5))
+         if(!blUpstrncmp(word,"LEVEL",5))
          {
             if(sscanf(value,"%d",&gInfoLevel)==0) 
                gInfoLevel = DEF_INFO;
          }
-         else if(!upstrncmp(word,"LOOP",4))
+         else if(!blUpstrncmp(word,"LOOP",4))
          {
-            if(!upstrncmp(value,"KAB",3))
+            if(!blUpstrncmp(value,"KAB",3))
                gLoopMode = LOOP_KABAT;
-            else if(!upstrncmp(value,"ABM",3))
+            else if(!blUpstrncmp(value,"ABM",3))
                gLoopMode = LOOP_ABM;
-            else if(!upstrncmp(value,"CHOTH",5))
+            else if(!blUpstrncmp(value,"CHOTH",5))
                gLoopMode = LOOP_CHOTHIA;
-            else if(!upstrncmp(value,"CONT",4))
+            else if(!blUpstrncmp(value,"CONT",4))
                gLoopMode = LOOP_CONTACT;
             else
                fprintf(stderr,"Error: Unknown loop mode (%s)\n",value);
          }
-         else if(!upstrncmp(word,"INSERT",6))
+         else if(!blUpstrncmp(word,"INSERT",6))
          {
-            if(!upstrncmp(value,"ON",2))
+            if(!blUpstrncmp(value,"ON",2))
                gShowInserts = TRUE;
             else
                gShowInserts = FALSE;
          }
-         else if(!upstrncmp(word,"VAR",3))
+         else if(!blUpstrncmp(word,"VAR",3))
          {
             if(sscanf(value,"%lf",&gVariability)==0) 
                gVariability = DEF_VARIABILITY;
          }
-         else if(!upstrncmp(word,"HTML",4))
+         else if(!blUpstrncmp(word,"HTML",4))
          {
-            if(!upstrncmp(value,"ON",2))
+            if(!blUpstrncmp(value,"ON",2))
                gHTML = TRUE;
             else
                gHTML = FALSE;
          }
-         else if(!upstrncmp(word,"URL",3))
+         else if(!blUpstrncmp(word,"URL",3))
          {
             int len;
 
-            if(!upstrncmp(value,"DEF",3))
+            if(!blUpstrncmp(value,"DEF",3))
             {
                strcpy(gURLFormat, URLFORMAT);
             }
@@ -1762,7 +1764,7 @@ void HandleSetCommand(char *buffer)
             else
             {
                strcpy(gURLFormat,"\"<a ");
-               strncpy(gURLFormat+4, value, MAXBUFF);
+               strncpy(gURLFormat+4, value, MAXBUFF-4);
                gURLFormat[MAXBUFF-1] = '\0';
                
                len = strlen(gURLFormat);
@@ -1773,9 +1775,9 @@ void HandleSetCommand(char *buffer)
               fprintf(stderr,"%s\n",gURLFormat);
             }
          }
-         else if(!upstrncmp(word,"CAN",3))
+         else if(!blUpstrncmp(word,"CAN",3))
          {
-            if(!upstrncmp(value,"DEF",3))
+            if(!blUpstrncmp(value,"DEF",3))
             {
                ReadChothiaData(gChothiaFile);
             }
@@ -1800,7 +1802,7 @@ reading key residue file\n");
                free(filename);
             }
          }
-         else if(!upstrncmp(word,"DELIM",5))
+         else if(!blUpstrncmp(word,"DELIM",5))
          {
             gDelim = value[0];
          }
@@ -1811,7 +1813,7 @@ reading key residue file\n");
       }
 
       /* Get the next word out of the string                            */
-      p = GetWord(p,word,MAXBUFF);
+      p = blGetWord(p,word,MAXBUFF);
    }  while(p!=NULL);
 
    /* 14.10.98 Added check that a value was specified!                  */
@@ -1836,7 +1838,7 @@ reading key residue file\n");
 
    11.05.94 Original
    16.05.95 Now allows keyword SOURCE in a LOOP definition which is 
-            ignored. Uses upstrncmp() rather than strncmp(). Allows
+            ignored. Uses blUpstrncmp() rather than strncmp(). Allows
             a # to start comments.
    22.04.96 Changed check on MAXCHOTHRES from > to >=
    07.05.96 Checks for CHOTHIANUM keyword in the file and, if found,
@@ -1845,7 +1847,7 @@ reading key residue file\n");
             keyword.
    29.05.96 Now frees any pre-existing data so this can be called
             multiple times.
-   28.02.05 GetWord() now takes max word length
+   28.02.05 blGetWord() now takes max word length
 */
 BOOL ReadChothiaData(char *filename)
 {
@@ -1890,15 +1892,15 @@ BOOL ReadChothiaData(char *filename)
       if(strlen(buffer) && buffer[0] != '!' && buffer[0] != '#')
       {
          /* Ignore the keyword SOURCE                                   */
-         if(!upstrncmp(buffer,"SOURCE",6))
+         if(!blUpstrncmp(buffer,"SOURCE",6))
          {
             continue;
          }
-         else if(!upstrncmp(buffer,"CHOTHIANUM",10))
+         else if(!blUpstrncmp(buffer,"CHOTHIANUM",10))
          {
             gCanonChothNum = TRUE;
          }
-         else if(!upstrncmp(buffer,"LOOP",4))   /* Start of entry       */
+         else if(!blUpstrncmp(buffer,"LOOP",4))   /* Start of entry       */
          {
             /* Terminate the previous list of resnums                   */
             if(p!=NULL)
@@ -1917,13 +1919,13 @@ BOOL ReadChothiaData(char *filename)
             if(p==NULL) return(FALSE);
             
             /* Strip out the word LOOP                                  */
-            chp = GetWord(buffer,word,MAXBUFF);
+            chp = blGetWord(buffer,word,MAXBUFF);
             /* Get the loop id                                          */
-            chp = GetWord(chp,p->LoopID,8);
+            chp = blGetWord(chp,p->LoopID,8);
             /* Get the class name                                       */
-            chp = GetWord(chp,p->class,8);
+            chp = blGetWord(chp,p->class,8);
             /* Get the loop length                                      */
-            chp = GetWord(chp,word,MAXBUFF);
+            chp = blGetWord(chp,word,MAXBUFF);
             sscanf(word,"%d",&(p->length));
             
             /* Set the resnum counter to zero                           */
@@ -1934,8 +1936,8 @@ BOOL ReadChothiaData(char *filename)
             /* Not the start of an entry, so must be a resid/type pair  */
             if(p!=NULL)
             {
-               chp = GetWord(buffer,p->resnum[count],8);
-               chp = GetWord(chp,p->restype[count],24);
+               chp = blGetWord(buffer,p->resnum[count],8);
+               chp = blGetWord(chp,p->restype[count],24);
                if(++count >= MAXCHOTHRES)
                {
                   fprintf(stderr,"Error: (Reading Chothia file) Too many \

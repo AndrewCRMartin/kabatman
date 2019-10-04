@@ -1,0 +1,38 @@
+# Makefile for KabatMan
+# Copyright (c) 1994, Dr. Andrew C.R. Martin
+#
+# N.B. The ansi program used to gerenate prototype files from C source
+# may be obtained from me on request
+#
+CC     = cc
+COPT   = -O3 
+LIBS   = -lm 
+OFILES = kabatman.o RdKabat.o BuildSelect.o BuildWhere.o \
+         ExecSearch.o KabCho.o subgroup.o
+PFILES = kabatman.p RdKabat.p BuildSelect.p BuildWhere.p \
+         ExecSearch.p KabCho.p subgroup.p
+LFILES = bioplib/upstrncmp.o \
+       bioplib/upstrcmp.o \
+       bioplib/throne.o \
+       bioplib/QueryStrStr.o \
+       bioplib/GetWord.o \
+       bioplib/array2.o \
+       bioplib/DNAtoAA.o \
+       bioplib/GetFilestem.o \
+       bioplib/KnownSeqLen.o \
+       bioplib/TrueSeqLen.o 
+
+all    : kabatman splitkabat
+
+
+kabatman : $(OFILES) $(LFILES)
+	$(CC) $(COPT) -o $@ $(OFILES) $(LFILES) $(LIBS)
+
+splitkabat : splitkabat.o $(LFILES2)
+	$(CC) $(COPT) -o splitkabat splitkabat.o
+
+.c.o   :
+	$(CC) $(COPT) -o $@ -c $<
+
+clean  :
+	/bin/rm -f $(OFILES) $(LFILES) splitkabat.o

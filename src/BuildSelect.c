@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       BuildSelect.c
    
-   Version:    V2.25
-   Date:       24.08.06
+   Version:    V2.26
+   Date:       04.10.19
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2005
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2019
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -64,8 +64,9 @@
    V2.21 13.07.00 Skipped
    V2.22 31.07.00 Skipped
    V2.23 03.04.02 Skipped
-   V2.24 28.02.05 GetWord() takes extra parameter
+   V2.24 28.02.05 blGetWord() takes extra parameter
    V2.25 24.08.06 Skipped
+   V2.26 04.10.19 Changed all bioplib calls to blXXX()
 
 *************************************************************************/
 /* Includes
@@ -97,7 +98,7 @@
 
    20.04.94 Original   By: ACRM
    23.06.95 Added missing return value
-   28.02.05 Added word length parameter for GetWord()
+   28.02.05 Added word length parameter for blGetWord()
 */
 BOOL BuildSelect(char *buffer)
 {
@@ -110,14 +111,14 @@ BOOL BuildSelect(char *buffer)
    /* Step through the buffer pulling a word at a time out of the buffer*/
    do
    {
-      pch=GetWord(pch,word,MAXBUFF);
+      pch=blGetWord(pch,word,MAXBUFF);
 
-      if(upstrcmp(word,"SELECT")) /* If the word is not `SELECT'        */
+      if(blUpstrcmp(word,"SELECT")) /* If the word is not `SELECT'        */
       {
          /* Run through the field list to see if we get a match         */
          for(i=0; gField[i].type; i++)
          {
-            if(!upstrncmp(word,gField[i].name,gField[i].length))
+            if(!blUpstrncmp(word,gField[i].name,gField[i].length))
             {
                /* We've got a match in our array of fields, so allocate 
                   the next entry in our linked list of selections.

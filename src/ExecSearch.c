@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.25
-   Date:       24.08.06
+   Version:    V2.26
+   Date:       04.10.19
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2006
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2019
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -78,6 +78,7 @@
                   a numbered sequence file
                   Changed all calls to GetKabatOffset() to add the new
                   count parameter
+   V2.26 04.10.19 Changed all bioplib calls to blXXX()
 
 *************************************************************************/
 /* Includes
@@ -271,7 +272,7 @@ BOOL HandleMatch(WHERE *wh, int *StackDepth)
          break;
       case FIELD_LENGTH:
          FillLoop(wh->param,d,loop);                /* Get loop         */
-         len = TrueSeqLen(loop);                    /* Get length       */
+         len = blTrueSeqLen(loop);                    /* Get length       */
          if(!sscanf(wh->data,"%d",&idata)) idata=0; /* Get required len */
          d->active[(*StackDepth)-1] = DoIntTest(len,
                                                 wh->comparison, idata);
@@ -464,7 +465,7 @@ BOOL DoStrTest(char *text, int comparison, char *subtext, BOOL fuzzy)
       }
       else
       {
-         if(QueryStrStr(text,subtext)!=NULL)  return(TRUE);
+         if(blQueryStrStr(text,subtext)!=NULL)  return(TRUE);
       }
       break;
    default:
@@ -522,7 +523,7 @@ BOOL fuzzystrstr(char *text, char *subtext)
             if(subtext[i] != '-') SubText[j++] = subtext[i];
          SubText[j] = '\0';
 
-         ptr = QueryStrStr(Text,SubText);
+         ptr = blQueryStrStr(Text,SubText);
       }         
    }
 
@@ -794,7 +795,7 @@ void DisplaySearch(FILE *fp, int StackDepth)
                break;
             case FIELD_LENGTH:
                FillLoop(p->param, d, loop);
-               len = TrueSeqLen(loop);
+               len = blTrueSeqLen(loop);
                fprintf(fp,"%d",len);
                GotPrint = TRUE;
                break;
@@ -957,7 +958,7 @@ void FillLoop(char *loopname, DATA *d, char *loop)
    /* Search the loop definition table for this loop                    */
    for(i=0; gLoopDefs[i].name != NULL; i++)
    {
-      if(!upstrncmp(loopname,gLoopDefs[i].name,2))
+      if(!blUpstrncmp(loopname,gLoopDefs[i].name,2))
       {
          /* Found the required loop, get the start and end              */
          switch(gLoopMode)
@@ -1093,13 +1094,13 @@ BOOL FindCanonical(DATA *d, char *LoopID, char *class)
    
    /* Get the loop length                                               */
    FillLoop(LoopID,d,LoopSeq);
-   LoopLen = TrueSeqLen(LoopSeq);
+   LoopLen = blTrueSeqLen(LoopSeq);
    
    for(p=gChothia; p!=NULL; NEXT(p))      /* Go through Chothia data    */
    {
       if(LoopLen == p->length)            /* Check loop length          */
       {
-         if(!upstrcmp(LoopID,p->LoopID))  /* Correct loop ID            */
+         if(!blUpstrcmp(LoopID,p->LoopID))  /* Correct loop ID            */
          {
             Matched = TRUE;               /* Assume all residues match  */
             
@@ -1124,14 +1125,14 @@ BOOL FindCanonical(DATA *d, char *LoopID, char *class)
                   {
                      FillLoop("L1",d,LoopSeq);
                      res = GetResidue(d, ChoKab("L1", 
-                                                TrueSeqLen(LoopSeq),
+                                                blTrueSeqLen(LoopSeq),
                                                 ResID));
                   }
                   else
                   {
                      FillLoop("H1",d,LoopSeq);
                      res = GetResidue(d, ChoKab("H1", 
-                                                TrueSeqLen(LoopSeq),
+                                                blTrueSeqLen(LoopSeq),
                                                 ResID));
                   }
                }
@@ -1251,8 +1252,8 @@ BOOL TooSimilar(DATA *d, DATA *e, REAL Cutoff)
    if(LDone)
    {
       /* Calculate the mean sequence length and mismatch penalty        */
-      Length1    = TrueSeqLen(d->light);
-      Length2    = TrueSeqLen(e->light);
+      Length1    = blTrueSeqLen(d->light);
+      Length2    = blTrueSeqLen(e->light);
       MeanLength = (REAL)(Length1+Length2)/(REAL)2.0;
       Penalty    = (REAL)100.0/MeanLength;
       TwoPenalty = (REAL)2.0 * Penalty;
@@ -1283,8 +1284,8 @@ BOOL TooSimilar(DATA *d, DATA *e, REAL Cutoff)
    if(HDone)
    {
       /* Calculate the mean sequence length and mismatch penalty        */
-      Length1    = TrueSeqLen(d->heavy);
-      Length2    = TrueSeqLen(e->heavy);
+      Length1    = blTrueSeqLen(d->heavy);
+      Length2    = blTrueSeqLen(e->heavy);
       MeanLength = (REAL)(Length1+Length2)/(REAL)2.0;
       Penalty    = (REAL)100.0/MeanLength;
       TwoPenalty = (REAL)2.0 * Penalty;
@@ -1600,7 +1601,7 @@ void FillFW(char *fwname, DATA *d, char *framework)
    }
            
    /* Store pointers depending on chain                                 */
-   if(!upstrncmp(fwname, "L", 1))
+   if(!blUpstrncmp(fwname, "L", 1))
    {
       chain      = d->light;
       KabatIndex = d->LNumbers;
@@ -1621,7 +1622,7 @@ void FillFW(char *fwname, DATA *d, char *framework)
    {
       for(i=0; gLoopDefs[i].name != NULL; i++)
       {
-         if(!upstrncmp(pre,gLoopDefs[i].name,2))
+         if(!blUpstrncmp(pre,gLoopDefs[i].name,2))
          {
             /* Found the required loop, get the start                   */
             switch(gLoopMode)
@@ -1650,7 +1651,7 @@ void FillFW(char *fwname, DATA *d, char *framework)
    
    if(strlen(post) == 0)
    {
-      if(!upstrncmp(fwname, "L", 1))
+      if(!blUpstrncmp(fwname, "L", 1))
       {
          strcpy(end, "L109");
       }
@@ -1665,7 +1666,7 @@ void FillFW(char *fwname, DATA *d, char *framework)
    {
       for(i=0; gLoopDefs[i].name != NULL; i++)
       {
-         if(!upstrncmp(post,gLoopDefs[i].name,2))
+         if(!blUpstrncmp(post,gLoopDefs[i].name,2))
          {
             switch(gLoopMode)
             {

@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       RdKabat.c
    
-   Version:    V2.25
-   Date:       24.08.06
+   Version:    V2.26
+   Date:       04.10.19
    Function:   Read data from a new format Kabat sequence file
    
-   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2006
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2019
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -69,6 +69,7 @@
    V2.24 28.02.05 Skipped
    V2.25 24.08.06 Modified GetKabatOffset() so it can return the label
                   from the offset as well as the offset from the label
+   V2.26 04.10.19 Changed all bioplib calls to blXXX()
 
 *************************************************************************/
 /* Includes
@@ -254,7 +255,7 @@ static int FixSequence(KABATENTRY *KabatEntry, BOOL *insert, BOOL
       }
       else
       {
-         KabatEntry->sequence[i++] = throne(sequence);
+         KabatEntry->sequence[i++] = blThrone(sequence);
       }
 
       /* Step on to next entry                                          */
@@ -281,7 +282,7 @@ static int FixSequence(KABATENTRY *KabatEntry, BOOL *insert, BOOL
    }
    else
    {
-      KabatEntry->sequence[i++] = throne(sequence);
+      KabatEntry->sequence[i++] = blThrone(sequence);
    }
 
    /* Terminate the sequence                                            */
@@ -300,7 +301,7 @@ static int FixSequence(KABATENTRY *KabatEntry, BOOL *insert, BOOL
       sp--;
    }
 
-   return(KnownSeqLen(KabatEntry->sequence));
+   return(blKnownSeqLen(KabatEntry->sequence));
 }
 
 /************************************************************************/
@@ -369,7 +370,7 @@ static int InsertSeq(KABATENTRY *KabatEntry, char *resnum, int *i,
          *end = '\0';
 
          /* Store 1-letter code                                         */
-         KabatEntry->sequence[(*i)++] = throne(cp);
+         KabatEntry->sequence[(*i)++] = blThrone(cp);
          count++;
 
          /* Step on to the next entry                                   */
@@ -406,7 +407,7 @@ static int InsertSeq(KABATENTRY *KabatEntry, char *resnum, int *i,
             *end = '\0';
             
             /* Store 1-letter code                                      */
-            KabatEntry->sequence[(*i)++] = DNAtoAA(cp);
+            KabatEntry->sequence[(*i)++] = blDNAtoAA(cp);
             count++;
             
             /* Step on to the next entry                                */
