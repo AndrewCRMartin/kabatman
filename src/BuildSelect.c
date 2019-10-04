@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       BuildSelect.c
    
-   Version:    V2.18
-   Date:       10.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin, UCL 1994-7
+   Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -16,6 +16,7 @@
                London.
    Phone:      +44 (0) 1372 275775 (Home)
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -60,6 +61,7 @@
    V2.16 08.05.96 Skipped
    V2.17 29.05.96 Skipped
    V2.18 10.09.97 Skipped
+   V2.19 14.10.98 Skipped
 
 *************************************************************************/
 /* Includes
