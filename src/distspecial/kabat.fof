@@ -1,0 +1,13 @@
+cat.ig.hc cat.ig.lambda
+chicken.ig.hc chicken.ig.lambda
+dog.ig.hc dog.ig.kappa
+frog.ig.hc
+gopher.ig.hc
+horse.ig.hc horse.ig.kappa horse.ig.lambda
+human.ig.hc human.ig.kappa human.ig.lambda
+mouse.ig.hc mouse.ig.kappa mouse.ig.lambda
+rabbit.ig.hc rabbit.ig.kappa rabbit.ig.lambda
+rat.ig.hc rat.ig.kappa rat.ig.lambda
+shark.ig.hc shark.ig.kappa shark.ig.lambda
+sheep.ig.hc sheep.ig.lambda
+various.ig.hc various.ig.kappa various.ig.lambda
