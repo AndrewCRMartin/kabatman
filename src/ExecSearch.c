@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.18a
-   Date:       24.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-7
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -16,6 +16,7 @@
                London.
    Phone:      +44 (0) 1372 275775 (Home)
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -67,6 +68,8 @@
    V2.18a 24.09.97 Fixed bug in DisplaySearch() - was ending up with the
                   output file being closed twice if selecting PIR and
                   redirecting
+   V2.19 14.10.98 The field delimiter now comes from gDelim instead of
+                  being hardcoded - DisplaySearch()
 
 *************************************************************************/
 /* Includes
@@ -626,6 +629,8 @@ BOOL IsComplete(DATA *d)
    11.04.96 Writes dataset date with number of hits
    10.09.97 Added subgroup
    24.09.97 Added check that fpPIR != fp before closing
+   14.10.98 Field delimiter now comes from gDelim instead of hard-coded
+            Comment at end is introduced with a #
 */
 void DisplaySearch(FILE *fp, int StackDepth)
 {
@@ -658,7 +663,10 @@ void DisplaySearch(FILE *fp, int StackDepth)
             if(first)
                first = FALSE;
             else
-               fprintf(fp,", ");
+            {
+               fputc(gDelim,fp);   /* 14.10.98 Instead of hardcoded     */
+               fputc(' ',fp);
+            }
                
             switch(p->type)
             {
@@ -783,7 +791,7 @@ void DisplaySearch(FILE *fp, int StackDepth)
    }
 
    if(gHTML) fprintf(fp,"<p><i>");
-   fprintf(fp,"\nNumber of hits = %d (Dataset created %s)\n",
+   fprintf(fp,"\n# Number of hits = %d (Dataset created %s)\n",
            NHits,gFileDate);
    if(gHTML) fprintf(fp,"</i><p>\n");
 
@@ -1199,10 +1207,14 @@ BOOL TooSimilar(DATA *d, DATA *e, REAL Cutoff)
 /************************************************************************/
 /*>void GetSubgroup(DATA *d, char *chain, char *subgroup)
    ------------------------------------------------------
+   Input:     DATA   *d           A data entry
+              char   *chain       Chain (H or L)
+   Output:    char   *subgroup    Subgroup assignment
+
    This is an interface to Sophie Deret's routine for finding the 
    subgroup of a human sequence.
 
-
+   09.09.97 Original   By: ACRM
 */
 void GetSubgroup(DATA *d, char *chain, char *subgroup)
 {
@@ -1231,6 +1243,17 @@ void GetSubgroup(DATA *d, char *chain, char *subgroup)
 
 
 /************************************************************************/
+/*>void DoGetSubgroup(char *sequence, char *class, char *subgroup)
+   ---------------------------------------------------------------
+   Input:     char    *sequence     Amino acid sequence
+   Output:    char    *class        Assigned class
+              char    *subgroup     Assigned subgroup
+
+   Assigning the textual class and subgroup from the results of Sophie
+   Deret's routine.
+
+   09.09.97 Original   By: ACRM
+*/
 void DoGetSubgroup(char *sequence, char *class, char *subgroup)
 {
    long classnum, sgpenum;
@@ -1360,3 +1383,5 @@ void WriteAsPIR(FILE *fp, DATA *d)
       fprintf(fp,"*\n");
    }
 }
+
+

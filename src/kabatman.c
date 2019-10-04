@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.18a
-   Date:       24.09.97
+   Version:    V2.19
+   Date:       14.10.98
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) Andrew C. R. Martin 1994-7
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-8
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -16,6 +16,7 @@
                London.
    Phone:      +44 (0) 1372 275775 (Home)
    EMail:      martin@biochem.ucl.ac.uk
+               andrew@stagleys.demon.co.uk
                
 **************************************************************************
 
@@ -82,6 +83,8 @@
                   Added SET CANONICAL
    V2.18 10.09.97 New SUBGROUP field
    V2.18a 24.09.97 Fixed core-dump bug in ExecSearch.c
+   V2.19 14.10.98 Added SET DELIMITER and check that a value is supplied
+                  for SET commands
 
 *************************************************************************/
 /* Includes
@@ -119,6 +122,7 @@ static BOOL doStoreData(DATA **pData, KABATENTRY *Kabat, DATA *extra,
    21.07.94 Made OldFormat global
    23.06.95 Removed redundant variables
    11.04.96 Initialise gFileDate
+   14.10.98 DisplayCopyright() now takes a flag to introduce with #s
 */
 int main(int argc, char **argv)
 {
@@ -156,7 +160,7 @@ int main(int argc, char **argv)
       }
    }
 
-   DisplayCopyright();
+   DisplayCopyright(FALSE);
    
    if(!ReadChothiaData(gChothiaFile))
    {
@@ -171,8 +175,8 @@ not available.\n\n");
 
 
 /************************************************************************/
-/*>void DisplayCopyright(void)
-   ---------------------------
+/*>void DisplayCopyright(BOOL DoHash)
+   ----------------------------------
    Displays a copyright message.
 
    27.04.94 Original    By: ACRM
@@ -198,15 +202,22 @@ not available.\n\n");
    29.05.96 V2.17
    10.09.97 V2.18
    24.09.97 V2.18a
+   14.10.98 V2.19 Preceeds each line with a # if DoHash specified
 */
-void DisplayCopyright(void)
+void DisplayCopyright(BOOL DoHash)
 {
-   printf("\nKabatMan V2.18a\n");
-   printf("===============\n");
-   printf("Copyright (c) 1994-7, Dr. Andrew C.R. Martin, University \
-College London.\n\n");
+   printf("\n");
+   if(DoHash) printf("# ");
+   printf("KabatMan V2.19\n");
+   if(DoHash) printf("# ");
+   printf("==============\n");
+   if(DoHash) printf("# ");
+   printf("Copyright (c) 1994-8, Dr. Andrew C.R. Martin, University \
+College London.\n");
+   if(DoHash) printf("# ");
    printf("This program is copyright. Any copying without the permission \
 of the\n");
+   if(DoHash) printf("# ");
    printf("author is prohibited.\n\n");
 }
 
@@ -241,9 +252,14 @@ BOOL ParseCmdLine(int argc, char **argv, BOOL *ForceRead)
    {
       if(argv[0][0] == '-')
       {
-         if(!strcmp(argv[0],"-version") || !strcmp(argv[0],"--version"))
+         if(!strcmp(argv[0],"-version"))
          {
-            DisplayCopyright();
+            DisplayCopyright(TRUE);
+            exit(0);
+         }
+         if(!strcmp(argv[0],"--version"))
+         {
+            DisplayCopyright(FALSE);
             exit(0);
          }
          
@@ -1629,6 +1645,7 @@ void BuildFrom(char *buffer)
             char  *gURLFormat   Set by URL {format}
             CHOTHIA *gChothia   The Chothia data; refreshed by 
                                    SET CANONICAL {type}
+            char  gDelim        Set by DELIMiter {delim}
 
    Handles commands which set variables
 
@@ -1639,6 +1656,8 @@ void BuildFrom(char *buffer)
    02.04.96 Added SET HTML {ON|OFF}
    18.04.96 Added SET URL {format}
    29.05.96 Added SET CANONICAL {type}
+   14.10.98 Added SET DELIMiter {delim}
+            Added check for value!
 */
 void HandleSetCommand(char *buffer)
 {
@@ -1646,6 +1665,7 @@ void HandleSetCommand(char *buffer)
         value[MAXBUFF],
         *p = buffer;
    
+   value[0] = '\0';
    p = GetWord(p,word);
    do
    {
@@ -1653,11 +1673,12 @@ void HandleSetCommand(char *buffer)
       {
          /* It's not `SET', so it's a variable name, so get the value   */
          p = GetWord(p,value);
-         
+
          /* Carry out required action for each variable                 */
          if(!upstrncmp(word,"LEVEL",5))
          {
-            if(sscanf(value,"%d",&gInfoLevel)==0) gInfoLevel = DEF_INFO;
+            if(sscanf(value,"%d",&gInfoLevel)==0) 
+               gInfoLevel = DEF_INFO;
          }
          else if(!upstrncmp(word,"LOOP",4))
          {
@@ -1713,7 +1734,7 @@ void HandleSetCommand(char *buffer)
                {
                   strcpy(gURLFormat+len, "%s>%s</a>\"");
                }
-fprintf(stderr,"%s\n",gURLFormat);
+              fprintf(stderr,"%s\n",gURLFormat);
             }
          }
          else if(!upstrncmp(word,"CAN",3))
@@ -1743,6 +1764,10 @@ reading key residue file\n");
                free(filename);
             }
          }
+         else if(!upstrncmp(word,"DELIM",5))
+         {
+            gDelim = value[0];
+         }
          else
          {
             fprintf(stderr,"Error: Unknown variable (%s)\n",word);
@@ -1752,6 +1777,12 @@ reading key residue file\n");
       /* Get the next word out of the string                            */
       p = GetWord(p,word);
    }  while(p!=NULL);
+
+   /* 14.10.98 Added check that a value was specified!                  */
+   if(!value[0])
+   {
+      fprintf(stderr,"Error: Missing parameter (%s)\n",word);
+   }
 }
 
 

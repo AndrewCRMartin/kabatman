@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       BuildWhere.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Database program for reading Kabat sequence files
    
    Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
@@ -66,6 +66,7 @@
    V2.21 13.07.00 Fixed long-standing bug in SetWhereData() which meant
                   you couldn't do a string comparison with anything 
                   containing a ' or "
+   V2.22 31.07.00 Skipped
 
 *************************************************************************/
 /* Includes

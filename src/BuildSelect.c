@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       BuildSelect.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Database program for reading Kabat sequence files
    
    Copyright:  (c) UCL / Andrew C. R. Martin, UCL 1994-2000
@@ -64,6 +64,7 @@
    V2.19 14.10.98 Skipped
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Skipped
 
 *************************************************************************/
 /* Includes
