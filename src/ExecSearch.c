@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       ExecSearch.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Database program for reading Kabat sequence files
    
    Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
@@ -73,6 +73,7 @@
                   Fixed bug in DoGetSubgroup()
    V2.20 xx.xx.xx Skipped
    V2.21 13.07.00 Skipped
+   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
 
 *************************************************************************/
 /* Includes
@@ -814,6 +815,7 @@ void DisplaySearch(FILE *fp, int StackDepth)
    Extracts the sequence for a specified loop from a data structure
 
    25.04.94 Original    By: ACRM
+   31.07.00 Added CONTACT loop definitions
 */
 void FillLoop(char *loopname, DATA *d, char *loop)
 {
@@ -849,6 +851,10 @@ void FillLoop(char *loopname, DATA *d, char *loop)
          case LOOP_CHOTHIA:
             strcpy(start, gLoopDefs[i].ChothiaS);
             strcpy(end,   gLoopDefs[i].ChothiaE);
+            break;
+         case LOOP_CONTACT:
+            strcpy(start, gLoopDefs[i].ContactS);
+            strcpy(end,   gLoopDefs[i].ContactE);
             break;
          default:
             return;

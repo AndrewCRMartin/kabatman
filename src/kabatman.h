@@ -3,11 +3,11 @@
    Program:    KabatMan
    File:       kabatman.h
    
-   Version:    V2.23
-   Date:       03.04.02
+   Version:    V2.24
+   Date:       28.02.05
    Function:   Database program for reading Kabat sequence files
    
-   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2002
+   Copyright:  (c) UCL / Andrew C. R. Martin 1994-2005
    Author:     Dr. Andrew C. R. Martin
    Address:    Biomolecular Structure and Modelling Unit,
                Department of Biochemistry and Molecular Biology,
@@ -68,6 +68,7 @@
    V2.21 13.07.00 Skipped
    V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
    V2.23 03.04.02 Added refdate to KabatEntry structure
+   V2.24 28.02.05 Added types for LFR1...HFR4
 
 *************************************************************************/
 #ifndef _KABATMAN_H
@@ -132,6 +133,14 @@
 #define FIELD_URLHEAVY  23
 #define FIELD_SUBGROUP  24
 #define FIELD_REFDATE   25
+#define FIELD_LFR1      26
+#define FIELD_LFR2      27
+#define FIELD_LFR3      28
+#define FIELD_LFR4      29
+#define FIELD_HFR1      30
+#define FIELD_HFR2      31
+#define FIELD_HFR3      32
+#define FIELD_HFR4      33
 
 #define OPER_AND        1        /* Types for logical set operators     */
 #define OPER_OR         2
@@ -275,6 +284,14 @@ FIELD gField[]    =                         /* Link field names/numbers */
    {  FIELD_URLHEAVY,  4, "URLHEAVY"},
    {  FIELD_SUBGROUP,  4, "SUBGROUP"},
    {  FIELD_REFDATE,   3, "DATE"},
+   {  FIELD_LFR1,      4, "LFR1"},
+   {  FIELD_LFR2,      4, "LFR2"},
+   {  FIELD_LFR3,      4, "LFR3"},
+   {  FIELD_LFR4,      4, "LFR4"},
+   {  FIELD_HFR1,      4, "HFR1"},
+   {  FIELD_HFR2,      4, "HFR2"},
+   {  FIELD_HFR3,      4, "HFR3"},
+   {  FIELD_HFR4,      4, "HFR4"},
    {  0,               0, NULL}
 }  ;
 FIELD gSetOper[]  =                         /* Link set oper names/nums */

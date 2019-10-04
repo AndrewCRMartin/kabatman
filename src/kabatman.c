@@ -3,8 +3,8 @@
    Program:    KabatMan
    File:       kabatman.c
    
-   Version:    V2.21
-   Date:       13.07.00
+   Version:    V2.22
+   Date:       31.07.00
    Function:   Database program for reading Kabat sequence files
    
    Copyright:  (c) UCL / Andrew C. R. Martin 1994-2000
@@ -90,6 +90,7 @@
    V2.21 13.07.00 Fixed long-standing bug in BuildWhere/SetWhereData() 
                   which meant you couldn't do a string comparison with 
                   anything containing a ' or "
+   V2.22 31.07.00 Added LOOP definitions for Contact CDR definitions
 
 *************************************************************************/
 /* Includes
@@ -1669,6 +1670,7 @@ void BuildFrom(char *buffer)
    29.05.96 Added SET CANONICAL {type}
    14.10.98 Added SET DELIMiter {delim}
             Added check for value!
+   31.07.00 Added LOOP definitions for Contact CDR definitions
 */
 void HandleSetCommand(char *buffer)
 {
@@ -1699,6 +1701,8 @@ void HandleSetCommand(char *buffer)
                gLoopMode = LOOP_ABM;
             else if(!upstrncmp(value,"CHOTH",5))
                gLoopMode = LOOP_CHOTHIA;
+            else if(!upstrncmp(value,"CONT",4))
+               gLoopMode = LOOP_CONTACT;
             else
                fprintf(stderr,"Error: Unknown loop mode (%s)\n",value);
          }
