@@ -7,11 +7,13 @@
 # V2.0  07.07.94 Code only
 # V2.3  25.01.95 Code and separate src directory
 # V2.5  10.03.95 Code and now copies patchkabat.perl
+# V2.6  04.10.19 Added data directory
 
 BIOP=${HOME}/git/bioplib/src
 KABMAN=KabManV2.26
 KABSRC=$KABMAN/src
 KMBIOP=$KABSRC/bioplib
+KMDATA=$KABMAN/data
 
 # Create subdirectories
 if [ -d $KABMAN ]
@@ -36,6 +38,14 @@ then
 else
    echo "Creating bioplib sub-directory"
    mkdir $KMBIOP
+fi
+
+if [ -d $KMDATA ] 
+then
+   echo "Got data sub-directory"
+else
+   echo "Creating data sub-directory"
+   mkdir $KMDATA
 fi
 
 # Copy bioplib files into directory
@@ -70,7 +80,7 @@ cp licence.txt        $KABMAN
 cp patchkabat.perl    $KABMAN
 
 # Copy distribution specials into directory
-cp ./data/*.dat*       $KABMAN
+cp ./data/*            $KMDATA
 cp *.fof               $KABMAN
 cp ./src/Makefile.dist $KABSRC/Makefile
 
