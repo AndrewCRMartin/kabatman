@@ -8,7 +8,7 @@
 # V2.3  25.01.95 Code and separate src directory
 # V2.5  10.03.95 Code and now copies patchkabat.perl
 
-BIOP=/home/amartin/bioplib/src
+BIOP=${HOME}/git/bioplib/src
 KABMAN=KabManV2.25
 KABSRC=$KABMAN/src
 KMBIOP=$KABSRC/bioplib
