@@ -4,15 +4,15 @@
 # N.B. The ansi program used to gerenate prototype files from C source
 # may be obtained from me on request
 #
-CC     = cc
+CC     = cc -O3 -L$(HOME)/lib -I$(HOME)/include
 COPT   = 
-LIBS   = -lm
+LIBS   = -lm -lbiop -lgen -lm -lxml2
 ANSI   = ansi -p
 EXE    = kabatman
-OFILES = kabatman.o RdKabat.o libroutines.o BuildSelect.o BuildWhere.o \
-         ExecSearch.o KabCho.o
-PFILES = kabatman.p RdKabat.p libroutines.p BuildSelect.p BuildWhere.p \
-         ExecSearch.p KabCho.p
+OFILES = kabatman.o RdKabat.o BuildSelect.o BuildWhere.o \
+         ExecSearch.o KabCho.o subgroup.o
+PFILES = kabatman.p RdKabat.p BuildSelect.p BuildWhere.p \
+         ExecSearch.p KabCho.p subgroup.p
 
 
 all    : $(EXE) splitkabat

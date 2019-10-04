@@ -10,8 +10,6 @@ int upstrcmp(char *word1, char *word2)
 ;
 int upstrncmp(char *word1, char *word2, int ncomp)
 ;
-char *GetWord(char *buffer, char *word)
-;
 char throne(char *three)
 ;
 char thronex(char *three)

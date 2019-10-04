@@ -39,12 +39,14 @@ else
 fi
 
 # Copy bioplib files into directory
-cp ${BIOP}/SysDefs.h  $KMBIOP
-cp ${BIOP}/macros.h   $KMBIOP
-cp ${BIOP}/seq.h      $KMBIOP
-cp ${BIOP}/pdb.h      $KMBIOP
-cp ${BIOP}/MathType.h $KMBIOP
-cp ${BIOP}/general.h  $KMBIOP
+cp ${BIOP}/SysDefs.h    $KMBIOP
+cp ${BIOP}/macros.h     $KMBIOP
+cp ${BIOP}/seq.h        $KMBIOP
+cp ${BIOP}/pdb.h        $KMBIOP
+cp ${BIOP}/MathType.h   $KMBIOP
+cp ${BIOP}/general.h    $KMBIOP
+cp ${BIOP}/deprecated.h $KMBIOP
+cp ${BIOP}/hash.h       $KMBIOP
 
 # Copy source code into directory
 cp ./src/*.c ./src/*.h ./src/*.p  $KABSRC
