@@ -723,60 +723,62 @@ George Johnson.
 Revision History
 ----------------
 
-- V0.1  12.04.94 Development version
-- V1.0  27.04.94 Original release version
-- V1.1  11.05.94 Some internal changes for distribution purposes and
-                 fixed bug in command line parsing.
-- V1.2  11.05.94 Added new function for finding Chothia canonical classes.
-                 Blanks in the sequence are now read as ? rather than -
-- V2.0  30.06.94 Reads the new Kabat file format by default.
-- V2.1  11.07.94 Additional check made when matching light & heavy 
-                 chains; at least one author's name must match.
-- V2.2  21.07.94 New Kabat file reader takes strain information from
-                 ANNOTA STRN records. Now only takes the source from the
-                 filename if the filename is not `VARIOUS....'. Taking this
-                 information from the filename is not really required with
-                 the new format files.
-                 Also reads and compares all references rather than just
-                 the first.
-- V2.3  25.01.95 Added the SET VARIABILITY code.
-- V2.4  08.02.95 Modified for the January 1995 Kabat database format
-- V2.5  07.03.95 The Kabat reading code now places - instead of ? at the
-                 end of a sequence. This stops all the sequences which are
-                 truncated in CDR3 from giving maximum length CDR3s
-- V2.6  13.03.95 kabatman -version gives version information and exits.
-                 Fortran style comparisons (ne, eq, lt, etc.) now available.
-                 Fixed small bug in handling PIR option when a file is
-                 not specified. 
-- ----  31.03.95 Documentation changes only.
-- V2.7  13.05.95 The Chothia data file may now contain SOURCE records which
-                 are ignored by KabatMan and comments introduced by a # as
-                 well as a !
-- ---   16.06.95 Documentation changes only.
-- V2.8  22.06.95 Fixed bug when full chain sequences given in a WHERE clause
-- V2.9  23.06.95 Clean compiling under gcc -Wall
-- V2.10 27.06.95 Fixed bug in fuzzy string matching
-- ---   27.11.95 Documentation changes only.
-- V2.11 15.12.95 Introduced single character wildcard matches
-- ---   26.02.96 Documentation changes only.
-- V2.12 02.04.96 Added handling for IDs and URLs
-- V2.13 11.04.96 Added header lines to data file and datafile date
-                 Prints accession codes of skipped entries when reading
-                 Kabat data files. Allow --version as well as -version
-- V2.14 18.04.96 Added SET URL
-- V2.15 22.04.96 Fixed potential access violation in reading canonical
-                 data file.
-                 Fixed initialisation of URL string
-- V2.16 07.05.96 Chothia data file can now use Chothia or Kabat numbering
-- V2.17 29.05.96 Added SET CANONICAL
-- V2.18 10.09.97 Added SUBGROUP(chain) (Chain is either L or H)
-- V2.19 14.10.98 Added SET DELIMITER
-- V2.20 28.05.99 Fixed core-dump bug in EatInitials()
-- V2.21 13.07.00 Fixed long-standing bug preventing string equality 
-                 comparison when a string contained a ' or "
-- V2.22 31.07.00 Added Contact loop definitions
-- V2.23 03.04.02 Added DATE
-- V2.24 28.02.05 Added LFR1...HFR4
-- V2.25 24.08.06 Added SEQUENCE
-- V2.26 07.10.19 A maintenance release - all moved to GitHub and an install
-                 script added
+```
+V0.1  12.04.94 Development version
+V1.0  27.04.94 Original release version
+V1.1  11.05.94 Some internal changes for distribution purposes and
+               fixed bug in command line parsing.
+V1.2  11.05.94 Added new function for finding Chothia canonical classes.
+               Blanks in the sequence are now read as ? rather than -
+V2.0  30.06.94 Reads the new Kabat file format by default.
+V2.1  11.07.94 Additional check made when matching light & heavy 
+               chains; at least one author's name must match.
+V2.2  21.07.94 New Kabat file reader takes strain information from
+               ANNOTA STRN records. Now only takes the source from the
+               filename if the filename is not `VARIOUS....'. Taking this
+               information from the filename is not really required with
+               the new format files.
+               Also reads and compares all references rather than just
+               the first.
+V2.3  25.01.95 Added the SET VARIABILITY code.
+V2.4  08.02.95 Modified for the January 1995 Kabat database format
+V2.5  07.03.95 The Kabat reading code now places - instead of ? at the
+               end of a sequence. This stops all the sequences which are
+               truncated in CDR3 from giving maximum length CDR3s
+V2.6  13.03.95 kabatman -version gives version information and exits.
+               Fortran style comparisons (ne, eq, lt, etc.) now available.
+               Fixed small bug in handling PIR option when a file is
+               not specified. 
+----  31.03.95 Documentation changes only.
+V2.7  13.05.95 The Chothia data file may now contain SOURCE records which
+               are ignored by KabatMan and comments introduced by a # as
+               well as a !
+---   16.06.95 Documentation changes only.
+V2.8  22.06.95 Fixed bug when full chain sequences given in a WHERE clause
+V2.9  23.06.95 Clean compiling under gcc -Wall
+V2.10 27.06.95 Fixed bug in fuzzy string matching
+---   27.11.95 Documentation changes only.
+V2.11 15.12.95 Introduced single character wildcard matches
+---   26.02.96 Documentation changes only.
+V2.12 02.04.96 Added handling for IDs and URLs
+V2.13 11.04.96 Added header lines to data file and datafile date
+               Prints accession codes of skipped entries when reading
+               Kabat data files. Allow --version as well as -version
+V2.14 18.04.96 Added SET URL
+V2.15 22.04.96 Fixed potential access violation in reading canonical
+               data file.
+               Fixed initialisation of URL string
+V2.16 07.05.96 Chothia data file can now use Chothia or Kabat numbering
+V2.17 29.05.96 Added SET CANONICAL
+V2.18 10.09.97 Added SUBGROUP(chain) (Chain is either L or H)
+V2.19 14.10.98 Added SET DELIMITER
+V2.20 28.05.99 Fixed core-dump bug in EatInitials()
+V2.21 13.07.00 Fixed long-standing bug preventing string equality 
+               comparison when a string contained a ' or "
+V2.22 31.07.00 Added Contact loop definitions
+V2.23 03.04.02 Added DATE
+V2.24 28.02.05 Added LFR1...HFR4
+V2.25 24.08.06 Added SEQUENCE
+V2.26 07.10.19 A maintenance release - all moved to GitHub and an install
+               script added
+```
