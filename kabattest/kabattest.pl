@@ -1,24 +1,22 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -s
 #*************************************************************************
 #
 #   Program:    KabatTest
 #   File:       kabattest.pl
 #   
-#   Version:    V1.4
-#   Date:       21.10.99
+#   Version:    V1.5
+#   Date:       07.10.19
 #   Function:   Test a sequence against the KabatMan database
 #   
-#   Copyright:  (c) UCL, Dr. Andrew C. R. Martin 1995-9
-#   Author:     Dr. Andrew C. R. Martin
+#   Copyright:  (c) UCL, Dr. Andrew C. R. Martin 1995-2019
+#   Author:     Prof. Andrew C. R. Martin
 #   Address:    Biomolecular Structure & Modelling Unit,
 #               Department of Biochemistry & Molecular Biology,
 #               University College,
 #               Gower Street,
 #               London.
 #               WC1E 6BT.
-#   Phone:      (Home) +44 (0)1372 275775
-#               (Work) +44 (0)171 387 7050 X 3284
-#   EMail:      INTERNET: martin@biochem.ucl.ac.uk
+#   EMail:      andrew@bioinf.org.uk
 #               
 #*************************************************************************
 #
@@ -61,10 +59,16 @@
 #   V1.3  29.09.99 Fixed for KabatMan which outputs a # in front of the
 #                  number of hits
 #   V1.4  21.10.99 Modified to use ACRMPerlVars module
+#   V1.5  07.10.19 No longer uses ACRMPerlVars, but expects everything
+#                  installed together with kabatman
 # 
 #*************************************************************************
-require ACRMPerlVars;
-$KabatStat = $ENV{'KABATDIR'} . "kabat.stat"; # Stats on the Kabat d/b
+use Cwd qw(abs_path);
+use FindBin;
+use lib $FindBin::Bin;
+
+$kabatman  = abs_path("$FindBin::Bin") . "/kabatman";
+$KabatStat = $ENV{'KABATDIR'} . "/kabat.stat"; # Stats on the Kabat d/b
 $pid       = $$;
 $Warning   = 0;
 $NLight    = 3138;                # Default number of light chains in d/b
@@ -148,7 +152,7 @@ close(RSEARCH);
 close(RID);
 
 # Run the KabatMan program placing the output in a file
-system("$ACRMPerlVars::bindir/kabatman </tmp/runsearch.$pid >/tmp/results.$pid");
+system("$kabatman </tmp/runsearch.$pid >/tmp/results.$pid");
 
 # Now run through the resid file and output file from the search
 # identifying residues which are uncommon
