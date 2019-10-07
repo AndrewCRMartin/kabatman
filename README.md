@@ -1,13 +1,10 @@
 KabatMan
 ========
 
-Version 2.26
-------------
+Version 2.26 - 7th October 2019
+-------------------------------
 
-7th October 2019
-----------------
-
-*Copyright (c) 1994-2006*
+*Copyright (c) 1994-2019*
 
 *Prof. Andrew C.R. Martin / UCL / Reading*
 
@@ -15,10 +12,10 @@ Version 2.26
 
 *University College London* 
 
-                   Document created :   27th April, 1994
+Document created :   27th April, 1994
 
 
-1. Introduction
+A1. Introduction
 ---------------
 
 KabatMan is a simple database program for accessing the Kabat antibody
