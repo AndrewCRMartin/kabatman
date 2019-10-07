@@ -15,8 +15,8 @@ Version 2.26 - 7th October 2019
 Document created :   27th April, 1994
 
 
-A1. Introduction
----------------
+Introduction
+------------
 
 KabatMan is a simple database program for accessing the Kabat antibody
 sequence database. Kabat, et al. have, for some years, published
@@ -58,8 +58,9 @@ sequence files may be created and other information (such as CDR
 lengths) may be obtained while allowing many constraints to be placed
 on the selection of sequences.
 
-2. Building and installing
---------------------------
+Building and installing
+-----------------------
+
 To build and install the program simply type
 ```
 ./install.sh
@@ -83,8 +84,8 @@ environment variable to your `~/.tcsh` file instead.
 Note that the program will first look in the current directory for the
 data files and then in the directory specified by `KABATDIR`.
 
-3. Command Syntax
------------------
+Command Syntax
+--------------
 
 KabatMan is normally invoked simply with the command `kabatman'.
 Interaction is then interactive. Three options allow additional control
@@ -98,7 +99,7 @@ The `-version` (or `--version`) flag causes KabatMan to print its
 copyright/version message and exit.
 
 The `-f` flag forces the reading of new raw Kabat data files even if the
-kabat.dat file exists (see Section 4)
+kabat.dat file exists (see Section *The Data*)
 
 The `-v` flag sets the information level to 2 or more (default is 1). Each
 additional v increments the information level by one. A level of 2
@@ -114,8 +115,8 @@ The `-o` flag causes the program to read old Kabat format files.
 To leave the program, type QUIT or EXIT at the prompt.
 
 
-4. The Data
------------
+The Data
+--------
 
 Since the data have been static since 2000, you probably won't want to
 rebuild the data, but, if you do, then run the script
@@ -279,8 +280,8 @@ the definition of the canonical. This information is not used by the
 KabatMan program.
 
 
-5. The Database Model
----------------------
+The Database Model
+------------------
 
 The database uses a simple functional data model (FDM). As well as
 allowing data stored directly in the database tables to be accessed,
@@ -305,8 +306,8 @@ this incurs a time penalty, the current database takes no more than a
 few seconds to search and the lack of optimisation simplifies the code.
 
 
-6. The Query Language
----------------------
+The Query Language
+------------------
 
 Data in the database is accessed using a SQL-like query language. The
 main deviation between the language used here and SQL is that clauses
@@ -642,8 +643,8 @@ WHERE  light <> ''
 ```
 
 
-7. Loop Definitions
--------------------
+Loop Definitions
+----------------
 
 The `SET LOOPS` command allows one of the following four sets of loop
 definitions to be selected:
@@ -658,8 +659,8 @@ definitions to be selected:
    H3        H95 -- H102   H95 -- H102    H95 -- H102   H93 -- H101
 ```
 
-8. Standard Kabat Numbering
----------------------------
+Standard Kabat Numbering
+------------------------
 
 ```
 Light chain:    0     1     2     3     4     5     6     7     8     9   
@@ -696,8 +697,8 @@ Heavy chain:    0     1     2     3     4     5     6     7     8     9
               110   111   112   113
 ```
 
-9. Deviations from the Standard Numbering
------------------------------------------
+Deviations from the Standard Numbering
+--------------------------------------
 
 The Kabat standard numbering does not specify any naming convention for
 insertions which occur in addition to the supplied insertion
@@ -710,8 +711,8 @@ lead to differences in the naming of residues in such very long
 insertion regions.
 
 
-10. Acknowledgement
--------------------
+Acknowledgement
+---------------
 
 I should like to thank the maintainers of the Kabat sequence database
 for their assistance in making the data available and in listening to
@@ -719,8 +720,8 @@ our suggestions about the new format. In particular, my thanks go to
 George Johnson.
 
 
-11. Revision History
---------------------
+Revision History
+----------------
 
 V0.1  12.04.94 Development version
 V1.0  27.04.94 Original release version
