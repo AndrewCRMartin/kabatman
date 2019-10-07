@@ -40,11 +40,11 @@ format).
 The new format files are available from:
 
 ```
-        ftp://ncbi.nlm.nih.gov/repository/kabat/fixlen
+ftp://ncbi.nlm.nih.gov/repository/kabat/fixlen
 ```
 or
 ```
-        ftp://ftp.ebi.ac.uk/pub/databases/kabat/fixlen
+ftp://ftp.ebi.ac.uk/pub/databases/kabat/fixlen
 ```
 
 The format of these data files, while easy to read by eye, is somewhat
@@ -72,13 +72,13 @@ the first line of the install script if you wish to install elsewhere.
 This will add an environment variable, `KABATDIR`, to your `~/.bashrc`
 file:
 ```
-   export KABATDIR=$HOME/bin/share/kabatman
+export KABATDIR=$HOME/bin/share/kabatman
 ```
 
 If you are using *tcsh*, then you will need to add the
 environment variable to your `~/.tcsh` file instead.
 ```
-        setenv KABATDIR $HOME/bin/share/kabatman
+setenv KABATDIR $HOME/bin/share/kabatman
 ```
 
 Note that the program will first look in the current directory for the
@@ -112,7 +112,7 @@ as they are processed.
 
 The `-o` flag causes the program to read old Kabat format files.
 
-To leave the program, type QUIT or EXIT at the prompt.
+To leave the program, type `quit` or `exit` at the prompt.
 
 
 The Data
@@ -153,11 +153,11 @@ All files must be merged into a single datafile for use by KabatMan.
 This is achieved using a shell script of the form:
 
 ```
-       touch kabat.jan95.dat
-       for dir in 0*
-       do
-          cat $dir/* >>kabat.jan95.dat
-       done
+touch kabat.jan95.dat
+for dir in 0*
+do
+   cat $dir/* >>kabat.jan95.dat
+done
 ```
 
 This must be run from the directory containing all the Kabat
@@ -180,16 +180,16 @@ from the main `kabat.jan95.dat` file.
 The `KADBID` numbers of entries to be deleted should be placed into a
 file, one to a line. `PatchKabat` is then run using:
 ```
-   patchkabat [-d delfile] [-p patchfile] kabatdatabasefile >patchedfile
-              -d Specify file of deletions (entry numbers, one to a line)
-              -p Specify patch file
+patchkabat [-d delfile] [-p patchfile] kabatdatabasefile >patchedfile
+           -d Specify file of deletions (entry numbers, one to a line)
+           -p Specify patch file
 ```
 Either (or both) `-d` or `-p` must be specified. For example, to apply the
 additions and corrections in file `kabat.patch` to the database
 `kabat.jan95.dat` and delete the entries in `kabat.del`, you would use the
 command line:
 ```
-   patchkabat -d kabat.del -p kabat.patch kabat.jan95.dat >kabat.jan95.p1.dat
+patchkabat -d kabat.del -p kabat.patch kabat.jan95.dat >kabat.jan95.p1.dat
 ```
 Having prepared and merged the data, it must be split into separate
 files for specifes and chain using `splitkabat`.
@@ -199,7 +199,7 @@ modified to handle the 1995 Kabat database release.
 
 The program is run by typing:
 ```
-        splitkabat kabat1
+splitkabat kabat1
 ```
 This is repeated for kabat2, kabat3, etc. Data from each of the Kabat
 files will be appended to the appropriate class file.
@@ -220,19 +220,19 @@ NOTE THIS FILE MUST BE CALLED `kabat.fof`
 The following example file may be used for the Kabat dump files
 available at the time of writing:
 ```
-   cat.ig.hc
-   chicken.ig.hc chicken.ig.lambda
-   dog.ig.hc
-   frog.ig.hc
-   gopher.ig.hc
-   - horse.ig.lambda
-   human.ig.hc human.ig.kappa human.ig.lambda
-   mouse.ig.hc mouse.ig.kappa mouse.ig.lambda
-   rabbit.ig.hc rabbit.ig.kappa rabbit.ig.lambda
-   rat.ig.hc rat.ig.kappa rat.ig.lambda
-   shark.ig.hc
-   - sheep.ig.lambda
-   various.ig.hc various.ig.kappa various.ig.lambda
+cat.ig.hc
+chicken.ig.hc chicken.ig.lambda
+dog.ig.hc
+frog.ig.hc
+gopher.ig.hc
+- horse.ig.lambda
+human.ig.hc human.ig.kappa human.ig.lambda
+mouse.ig.hc mouse.ig.kappa mouse.ig.lambda
+rabbit.ig.hc rabbit.ig.kappa rabbit.ig.lambda
+rat.ig.hc rat.ig.kappa rat.ig.lambda
+shark.ig.hc
+- sheep.ig.lambda
+various.ig.hc various.ig.kappa various.ig.lambda
 ```
 
 When the program is run by typing the command `kabatman`, the data 
@@ -254,14 +254,14 @@ must be called chothia.dat and has the format:
 LOOP <loopname> <class> <length>
 <residue> <types>
 ...
-```
-Where:
-```
-      <loopname> is L1...H3
-      <class>    is the class label (1, 2, 1', etc)
-      <length>   is the loop length (AbM definition)
-      <residue>  is a residue specification (e.g. L25)
-      <types>    is a list of allowed amino acid types (e.g. SYF)
+
+where:
+
+     <loopname> is L1...H3
+     <class>    is the class label (1, 2, 1', etc)
+     <length>   is the loop length (AbM definition)
+     <residue>  is a residue specification (e.g. L25)
+     <types>    is a list of allowed amino acid types (e.g. SYF)
 ```
 
 Residue numbering is Kabat standard unless the keyword `CHOTHIANUMBERING`
@@ -296,7 +296,7 @@ antibody Fv. Similarly, the lengths of the CDRs are not stored
 directly in the database tables; they are calculated using a function
 in the database.
 
-Clauses in the WHERE statement which filter the data are combined in
+Clauses in the `WHERE` statement which filter the data are combined in
 reverse polish notation. Selections resulting from each clause are
 placed on a stack and the logical operators act on this stack to
 combine the results. No attempt is made to optimise the searches (i.e.
@@ -311,27 +311,27 @@ The Query Language
 
 Data in the database is accessed using a SQL-like query language. The
 main deviation between the language used here and SQL is that clauses
-within the WHERE statement are combined in reverse polish notation.
+within the `WHERE` statement are combined in reverse polish notation.
 This is described in detail below. Also, since there is only one table
-in the database, there is no FROM statement.
+in the database, there is no `FROM` statement.
 
-The query language uses three statements: SET, SELECT and WHERE. The
-SELECT and WHERE commands take you into a mode where clauses are
-specified with no introductionary SELECT or WHERE keyword; the prompt
+The query language uses three statements: `SET`, `SELECT` and `WHERE`. The
+`SELECT` and `WHERE` commands take you into a mode where clauses are
+specified with no introductionary `SELECT` or `WHERE` keyword; the prompt
 changes from `KABATMAN>` to indicate the current mode. Conversely,
-the SET command needs to be specified on each line where variables are
+the `SET` command needs to be specified on each line where variables are
 to be set and may only be given at the `KABATMAN>` prompt.
 
-The SELECT and WHERE statements remain valid until a new statement is
-given. This allows multiple SELECT statements (each followed by a
-search execution) to obtain different data from a single WHERE
-statement thus saving on typing. Similarly, a number of WHERE
+The `SELECT` and `WHERE` statements remain valid until a new statement is
+given. This allows multiple `SELECT` statements (each followed by a
+search execution) to obtain different data from a single `WHERE`
+statement thus saving on typing. Similarly, a number of `WHERE`
 statements may be tried to obtain the same data under different search
 conditions. 
 
-The QUIT or EXIT command is used to leave the program.
+The `QUIT` or `EXIT` command is used to leave the program.
 
-### 5.1 The SET Statement 
+### 5.1 The `SET` Statement 
 
 This allows variables to be set. These are used to control the
 operation of the program and options set using this keyword remain
@@ -341,7 +341,7 @@ variables to be set and may only be given at the `KABATMAN>'
 prompt. More than one variable/value pair may be specified on the
 line. The syntax is thus:
 ```
-        SET variable value [variable value ...]
+SET variable value [variable value ...]
 ```
 (Square brackets indicate optional items; you don't type them!)
 
@@ -370,7 +370,7 @@ The following variables may be set:
 
 The VARIABILITY variable allows one to specify that only sequences
 with less than a specified sequence homology be displayed. After
-all WHERE sub-clauses have been executed, KabatMan will do a pairwise
+all `WHERE` sub-clauses have been executed, KabatMan will do a pairwise
 comparison of all the remaining antibodies and reject one from each
 pair which has a percentage sequence identity greater than this value.
 For each sequence mismatch, a penalty of 100/MeanLength % is scored;
@@ -382,7 +382,7 @@ run faster since the variability code will not be called).
 
 N.B. This option is SLOW if there are more than a couple of hundred
 hits to be processed. For example, with 1124 hits (using the query
-SELECT light WHERE complete = t;), takes 4 minutes on a 100MHz R4000
+`SELECT light WHERE complete = t;`), takes 4 minutes on a 100MHz R4000
 SG Indy. 
 
 
@@ -418,7 +418,7 @@ names contain commas so one can change to any other character (e.g. |)
 as a delimiter. A space is automatically appended to the delimiter.
 
 
-### 5.2 The SELECT Statement
+### 5.2 The `SELECT` Statement
 
 Specifies what data should be extracted from the database. Each field
 may be separated by a space and/or a comma. Parameters are placed in
@@ -470,14 +470,14 @@ The following fields may be displayed:
 (The required parts of field names are in capital letters)
 
 
-### 5.3 The WHERE Statement
+### 5.3 The `WHERE` Statement
 
 Specifies filters to be applied to the data in order to select a
 subset which is to be displayed.
 
 Each clause is specified in conventional order notation using the form:
 ```
-        property  test  value
+property  test  value
 ```
 The following properties are supported:
 ```
@@ -563,7 +563,7 @@ t or f, is actually considered).
 All comparisons ignore case. 
 
 
-WHERE clauses are combined using Reverse Polish Notation. Each clause
+`WHERE` clauses are combined using Reverse Polish Notation. Each clause
 generates a set which matches the specified test and places the set on
 a stack. The logical operators AND, OR and NOT cause operations to be
 performed on this stack of sets.
@@ -590,7 +590,7 @@ output to be directed to the screen. Alternatively, output my be sent
 to a file by typing a greater than sign followed by a filename (a
 space may optionally be placed between the > and the filename). Output
 from the search will then be sent to this file rather than to standard
-output. Note that the PIR option in the SELECT statement also allows a
+output. Note that the PIR option in the `SELECT` statement also allows a
 file to be specified for output.
 
 
@@ -723,60 +723,60 @@ George Johnson.
 Revision History
 ----------------
 
-V0.1  12.04.94 Development version
-V1.0  27.04.94 Original release version
-V1.1  11.05.94 Some internal changes for distribution purposes and
-               fixed bug in command line parsing.
-V1.2  11.05.94 Added new function for finding Chothia canonical classes.
-               Blanks in the sequence are now read as ? rather than -
-V2.0  30.06.94 Reads the new Kabat file format by default.
-V2.1  11.07.94 Additional check made when matching light & heavy 
-               chains; at least one author's name must match.
-V2.2  21.07.94 New Kabat file reader takes strain information from
-               ANNOTA STRN records. Now only takes the source from the
-               filename if the filename is not `VARIOUS....'. Taking this
-               information from the filename is not really required with
-               the new format files.
-               Also reads and compares all references rather than just
-               the first.
-V2.3  25.01.95 Added the SET VARIABILITY code.
-V2.4  08.02.95 Modified for the January 1995 Kabat database format
-V2.5  07.03.95 The Kabat reading code now places - instead of ? at the
-               end of a sequence. This stops all the sequences which are
-               truncated in CDR3 from giving maximum length CDR3s
-V2.6  13.03.95 kabatman -version gives version information and exits.
-               Fortran style comparisons (ne, eq, lt, etc.) now available.
-               Fixed small bug in handling PIR option when a file is
-               not specified. 
-----  31.03.95 Documentation changes only.
-V2.7  13.05.95 The Chothia data file may now contain SOURCE records which
-               are ignored by KabatMan and comments introduced by a # as
-               well as a !
----   16.06.95 Documentation changes only.
-V2.8  22.06.95 Fixed bug when full chain sequences given in a WHERE clause
-V2.9  23.06.95 Clean compiling under gcc -Wall
-V2.10 27.06.95 Fixed bug in fuzzy string matching
----   27.11.95 Documentation changes only.
-V2.11 15.12.95 Introduced single character wildcard matches
----   26.02.96 Documentation changes only.
-V2.12 02.04.96 Added handling for IDs and URLs
-V2.13 11.04.96 Added header lines to data file and datafile date
-               Prints accession codes of skipped entries when reading
-               Kabat data files. Allow --version as well as -version
-V2.14 18.04.96 Added SET URL
-V2.15 22.04.96 Fixed potential access violation in reading canonical
-               data file.
-               Fixed initialisation of URL string
-V2.16 07.05.96 Chothia data file can now use Chothia or Kabat numbering
-V2.17 29.05.96 Added SET CANONICAL
-V2.18 10.09.97 Added SUBGROUP(chain) (Chain is either L or H)
-V2.19 14.10.98 Added SET DELIMITER
-V2.20 28.05.99 Fixed core-dump bug in EatInitials()
-V2.21 13.07.00 Fixed long-standing bug preventing string equality 
-               comparison when a string contained a ' or "
-V2.22 31.07.00 Added Contact loop definitions
-V2.23 03.04.02 Added DATE
-V2.24 28.02.05 Added LFR1...HFR4
-V2.25 24.08.06 Added SEQUENCE
-V2.26 07.10.19 A maintenance release - all moved to GitHub and an install
-               script added
+- V0.1  12.04.94 Development version
+- V1.0  27.04.94 Original release version
+- V1.1  11.05.94 Some internal changes for distribution purposes and
+                 fixed bug in command line parsing.
+- V1.2  11.05.94 Added new function for finding Chothia canonical classes.
+                 Blanks in the sequence are now read as ? rather than -
+- V2.0  30.06.94 Reads the new Kabat file format by default.
+- V2.1  11.07.94 Additional check made when matching light & heavy 
+                 chains; at least one author's name must match.
+- V2.2  21.07.94 New Kabat file reader takes strain information from
+                 ANNOTA STRN records. Now only takes the source from the
+                 filename if the filename is not `VARIOUS....'. Taking this
+                 information from the filename is not really required with
+                 the new format files.
+                 Also reads and compares all references rather than just
+                 the first.
+- V2.3  25.01.95 Added the SET VARIABILITY code.
+- V2.4  08.02.95 Modified for the January 1995 Kabat database format
+- V2.5  07.03.95 The Kabat reading code now places - instead of ? at the
+                 end of a sequence. This stops all the sequences which are
+                 truncated in CDR3 from giving maximum length CDR3s
+- V2.6  13.03.95 kabatman -version gives version information and exits.
+                 Fortran style comparisons (ne, eq, lt, etc.) now available.
+                 Fixed small bug in handling PIR option when a file is
+                 not specified. 
+- ----  31.03.95 Documentation changes only.
+- V2.7  13.05.95 The Chothia data file may now contain SOURCE records which
+                 are ignored by KabatMan and comments introduced by a # as
+                 well as a !
+- ---   16.06.95 Documentation changes only.
+- V2.8  22.06.95 Fixed bug when full chain sequences given in a WHERE clause
+- V2.9  23.06.95 Clean compiling under gcc -Wall
+- V2.10 27.06.95 Fixed bug in fuzzy string matching
+- ---   27.11.95 Documentation changes only.
+- V2.11 15.12.95 Introduced single character wildcard matches
+- ---   26.02.96 Documentation changes only.
+- V2.12 02.04.96 Added handling for IDs and URLs
+- V2.13 11.04.96 Added header lines to data file and datafile date
+                 Prints accession codes of skipped entries when reading
+                 Kabat data files. Allow --version as well as -version
+- V2.14 18.04.96 Added SET URL
+- V2.15 22.04.96 Fixed potential access violation in reading canonical
+                 data file.
+                 Fixed initialisation of URL string
+- V2.16 07.05.96 Chothia data file can now use Chothia or Kabat numbering
+- V2.17 29.05.96 Added SET CANONICAL
+- V2.18 10.09.97 Added SUBGROUP(chain) (Chain is either L or H)
+- V2.19 14.10.98 Added SET DELIMITER
+- V2.20 28.05.99 Fixed core-dump bug in EatInitials()
+- V2.21 13.07.00 Fixed long-standing bug preventing string equality 
+                 comparison when a string contained a ' or "
+- V2.22 31.07.00 Added Contact loop definitions
+- V2.23 03.04.02 Added DATE
+- V2.24 28.02.05 Added LFR1...HFR4
+- V2.25 24.08.06 Added SEQUENCE
+- V2.26 07.10.19 A maintenance release - all moved to GitHub and an install
+                 script added
