@@ -7,11 +7,12 @@
 # V2.0  07.07.94 Code only
 # V2.3  25.01.95 Code and separate src directory
 # V2.5  10.03.95 Code and now copies patchkabat.perl
-# V2.6  04.10.19 Added data directory
+# V2.6  04.10.19 Added data directory and kabattest
 
 BIOP=${HOME}/git/bioplib/src
 KABMAN=KabManV2.26
 KABSRC=$KABMAN/src
+KABTST=$KABMAN/kabattest
 KMBIOP=$KABSRC/bioplib
 KMDATA=$KABMAN/data
 
@@ -22,6 +23,14 @@ then
 else
    echo "Creating KabatMan directory"
    mkdir $KABMAN
+fi
+
+if [ -d $KABTST ]
+then
+   echo "Got kabattest directory"
+else
+   echo "Creating kabattest directory"
+   mkdir $KABTST
 fi
 
 if [ -d $KABSRC ] 
@@ -72,16 +81,20 @@ cp ${BIOP}/upstrncmp.c    $KMBIOP
 # Copy source code into directory
 cp ./src/*.c ./src/*.h ./src/*.p  $KABSRC
 
+# Copy install script into directory
+cp install.sh         $KABMAN
+
 # Copy documentation into directory
-cp *.doc              $KABMAN
-cp licence.txt        $KABMAN
+cp README.md          $KABMAN
 
 # Copy in the patchkabat program
 cp patchkabat.perl    $KABMAN
 
+# Copy data and kabattest
+cp ./data/*           $KMDATA
+cp ./kabattest/*      $KABTST
+
 # Copy distribution specials into directory
-cp ./data/*            $KMDATA
-cp *.fof               $KABMAN
 cp ./src/Makefile.dist $KABSRC/Makefile
 
 # Tar up the distribution directory
@@ -90,5 +103,4 @@ gzip ${KABMAN}.tar
 
 # and finally delete the directory
 /bin/rm -rf $KABMAN
-
 

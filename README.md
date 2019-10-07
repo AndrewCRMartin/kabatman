@@ -1,40 +1,38 @@
+KabatMan
+========
 
+Version 2.26
+------------
 
-                               KabatMan
-                               --------
+7th October 2019
+----------------
 
-                              Version 2.25
-                            24th August, 2006
+*Copyright (c) 1994-2006*
 
+*Prof. Andrew C.R. Martin / UCL / Reading*
 
-                          Copyright (c) 1994-2006
-                  Dr. Andrew C.R. Martin / UCL / Reading,
+*Department of Structural and Molecular Biology*
 
-
-                 Biomolecular Structure & Modelling Unit,
-             Department of Biochemistry and Molecular Biology,
-                           University College, 
-                              Gower Street,
-                                 London.
-                                WC1E 6BT.
-
+*University College London* 
 
                    Document created :   27th April, 1994
 
 
 1. Introduction
-===============
+---------------
 
 KabatMan is a simple database program for accessing the Kabat antibody
-sequence database. Kabat, et al. have, for some years, published collected
-antibody sequence data in the form of a book, but as the number of 
-sequences solved increases, the need for electronic distribution
-becomes more and more necessary.
+sequence database. Kabat, et al. have, for some years, published
+collected antibody sequence data in the form of a book, but as the
+number of sequences solved increases, the need for electronic
+distribution becomes more and more necessary.
 
 The Kabat data have now been made available as `dump' files by FTP
 from the following site:
 
-        ncbi.nlm.nih.gov:repository/kabat/dump
+```
+ncbi.nlm.nih.gov:repository/kabat/dump
+```
 
 As of V2.0, KabatMan now reads the new format introduced on 2nd April
 and first made available during June, 1994. The old format files
@@ -44,71 +42,94 @@ format).
 
 The new format files are available from:
 
+```
         ftp://ncbi.nlm.nih.gov/repository/kabat/fixlen
+```
 or
+```
         ftp://ftp.ebi.ac.uk/pub/databases/kabat/fixlen
-
+```
 
 The format of these data files, while easy to read by eye, is somewhat
 difficult to scan by computer. Currently, no software is supplied to
 derive data from the files, though it is the intention of the Kabat
 database maintainers to provide a more computer-friendly environment
-in the future. KabatMan (``Kabat Manager'') has been written to fill
+in the future. KabatMan (`Kabat Manager`) has been written to fill
 the present gap. It assembles the antibody data from the Kabat dump
 files and allows searches to be performed on the data. Standard PIR
 sequence files may be created and other information (such as CDR
 lengths) may be obtained while allowing many constraints to be placed
 on the selection of sequences.
 
+2. Building and installing
+--------------------------
+To build and install the program simply type
+```
+./install.sh
+```
 
-2. Command Syntax
-=================
+This will install the program in your `~/bin` directory. Simply edit
+the first line of the install script if you wish to install elsewhere.
+
+This will add an environment variable, `KABATDIR`, to your `~/.bashrc`
+file:
+```
+   export KABATDIR=$HOME/bin/share/kabatman
+```
+
+If you are using *tcsh*, then you will need to add the
+environment variable to your `~/.tcsh` file instead.
+```
+        setenv KABATDIR $HOME/bin/share/kabatman
+```
+
+Note that the program will first look in the current directory for the
+data files and then in the directory specified by `KABATDIR`.
+
+3. Command Syntax
+-----------------
 
 KabatMan is normally invoked simply with the command `kabatman'.
 Interaction is then interactive. Three options allow additional control
 over the program:
-
+```
         kabatman [-version] [-f] [-v[v...]] [-q] [-o]
-
+```
 (Square brackets indicate optional items; you don't type them!)
 
-The -version (or --version) flag causes KabatMan to print its 
+The `-version` (or `--version`) flag causes KabatMan to print its 
 copyright/version message and exit.
 
-The -f flag forces the reading of new raw Kabat data files even if the
-kabat.dat file exists (see Section 3)
+The `-f` flag forces the reading of new raw Kabat data files even if the
+kabat.dat file exists (see Section 4)
 
-The -v flag sets the information level to 2 or more (default is 1). Each
+The `-v` flag sets the information level to 2 or more (default is 1). Each
 additional v increments the information level by one. A level of 2
 causes the program to display the name of each sequence as it is
 stored.
 
-The -q flag sets the information level to 0 (default is 1). This
+The `-q` flag sets the information level to 0 (default is 1). This
 prevents the program from displaying the names of Kabat sequence files
 as they are processed.
 
-The -o flag causes the program to read old Kabat format files.
-
-
-If you do not have the data stored in the current directory, you
-should first define the environment variable KABATDIR to point to the
-directory containing the data. For example, using a C-shell:
-
-        setenv KABATDIR /usr/user/martin/kabat
-
-or using a Bourne-like shell:
-
-        export KABATDIR=/usr/user/martin/kabat
-
-Whenever a file is opened, the program will look first in the current
-directory and then in the directory specified by KABATDIR.
-
+The `-o` flag causes the program to read old Kabat format files.
 
 To leave the program, type QUIT or EXIT at the prompt.
 
 
-3. The Data
-===========
+4. The Data
+-----------
+
+Since the data have been static since 2000, you probably won't want to
+rebuild the data, but, if you do, then run the script
+```
+mirror/buildkabat.sh
+```
+to rebuild the Kabat database and then run
+```
+mirror/installkabat.sh
+```
+to install it.
 
 Input data for KabatMan are the Kabat dump files. Either the old format
 or the new format (available after June 1994) may be used. By default,
@@ -133,72 +154,74 @@ code (000001, 000002, etc.) The directory names reflect the first
 All files must be merged into a single datafile for use by KabatMan.
 This is achieved using a shell script of the form:
 
+```
        touch kabat.jan95.dat
        for dir in 0*
        do
           cat $dir/* >>kabat.jan95.dat
        done
+```
 
 This must be run from the directory containing all the Kabat
 sub-directories (000, 001, 002, etc.) and concatenates the data into a
-file called kabat.jan95.dat (You should change the date as required).
+file called `kabat.jan95.dat` (You should change the date as required).
 You should ensure that there are no other files or directory starting
 with the digit 0 and, when the database increases to include KADBID
 entries starting with a 1, 2, 3, etc rather than just a 0 the script
 should be suitably modified.
 
-In addition, the Kabat database may be distributed with a `temp'
+In addition, the Kabat database may be distributed with a `temp`
 directory containing incremental additions and corrections to the
 database. Again this is distributed as a compressed tar file
-(temp.tar.Z) which unpacks to create a subdirectory called temp. These
-files should be concatenated into a single file, kabat.patch, which is
-applied to the main kabat.jan95.dat file created above using the
-program PatchKabat. This program may also be used to delete entries
-from the main kabat.jan95.dat file.
+(`temp.tar.Z`) which unpacks to create a subdirectory called `temp`. These
+files should be concatenated into a single file, `kabat.patch`, which is
+applied to the main `kabat.jan95.dat` file created above using the
+program `PatchKabat`. This program may also be used to delete entries
+from the main `kabat.jan95.dat` file.
 
-The KADBID numbers of entries to be deleted should be placed into a
-file, one to a line. PatchKabat is then run using:
-
+The `KADBID` numbers of entries to be deleted should be placed into a
+file, one to a line. `PatchKabat` is then run using:
+```
    patchkabat [-d delfile] [-p patchfile] kabatdatabasefile >patchedfile
               -d Specify file of deletions (entry numbers, one to a line)
               -p Specify patch file
-
-Either (or both) -d or -p must be specified. For example, to apply the
-additions and corrections in file kabat.patch to the database
-kabat.jan95.dat and delete the entries in kabat.del, you would use the
+```
+Either (or both) `-d` or `-p` must be specified. For example, to apply the
+additions and corrections in file `kabat.patch` to the database
+`kabat.jan95.dat` and delete the entries in `kabat.del`, you would use the
 command line:
-
+```
    patchkabat -d kabat.del -p kabat.patch kabat.jan95.dat >kabat.jan95.p1.dat
-
+```
 Having prepared and merged the data, it must be split into separate
-files for specifes and chain using splitkabat.
+files for specifes and chain using `splitkabat`.
 
 N.B. In common with KabatMan V2.4 itself, splitkabat V1.2 has been
 modified to handle the 1995 Kabat database release.
 
 The program is run by typing:
-
+```
         splitkabat kabat1
-
+```
 This is repeated for kabat2, kabat3, etc. Data from each of the Kabat
 files will be appended to the appropriate class file.
 
-Also requried is a `file of files' which lists the Kabat dump files to
+Also requried is a `file of files` which lists the Kabat dump files to
 be read. The file of files has any number of lines of the format:
-
+```
 { heavy | - } [light [light [light] ] ]
-
+```
 where heavy and light are names of matching heavy-chain and
 light-chain Kabat dump files. (Square brackets indicate optional
 items; you don't type them!)  If a light-chain dump file has no
 matching heavy chain dump file, the heavy chain file must be specified
-as `-'.
+as `-`.
 
-NOTE THIS FILE MUST BE CALLED kabat.fof
+NOTE THIS FILE MUST BE CALLED `kabat.fof`
 
 The following example file may be used for the Kabat dump files
 available at the time of writing:
-
+```
    cat.ig.hc
    chicken.ig.hc chicken.ig.lambda
    dog.ig.hc
@@ -212,36 +235,39 @@ available at the time of writing:
    shark.ig.hc
    - sheep.ig.lambda
    various.ig.hc various.ig.kappa various.ig.lambda
+```
 
-
-When the program is run by typing the command `kabatman', the data 
+When the program is run by typing the command `kabatman`, the data 
 contained in these files are processed, with correlations being made 
 between heavy and light chains of the same name and the resulting data
-are written to the file `kabat.dat' in the current directory.
+are written to the file `kabat.dat` in the current directory.
 
-If the file `kabat.dat' exists in the current directory, or in the
-directory described by the environment variable KABATDIR, the file of
-files and the Kabat dump files will be ignored. The -f flag on the
+If the file `kabat.dat` exists in the current directory, or in the
+directory described by the environment variable `KABATDIR`, the file of
+files and the Kabat dump files will be ignored. The `-f` flag on the
 command line forces reading of the file of files and the generation of
-`kabat.dat' from the Kabat dump files.
+`kabat.dat` from the Kabat dump files.
 
 For the Chothia canonical information to be available, there must also
 be a canonicals definition file in the current directory or in the
-directory described by the environment variable KABATDIR. This file
+directory described by the environment variable `KABATDIR`. This file
 must be called chothia.dat and has the format:
-
+```
 LOOP <loopname> <class> <length>
 <residue> <types>
 ...
-
-Where <loopname> is L1...H3
+```
+Where:
+```
+      <loopname> is L1...H3
       <class>    is the class label (1, 2, 1', etc)
       <length>   is the loop length (AbM definition)
       <residue>  is a residue specification (e.g. L25)
       <types>    is a list of allowed amino acid types (e.g. SYF)
+```
 
-Residue numbering is Kabat standard unless the keyword CHOTHIANUMBERING
-appears at the beginning of the file (before any LOOP keywords).
+Residue numbering is Kabat standard unless the keyword `CHOTHIANUMBERING`
+appears at the beginning of the file (before any `LOOP` keywords).
 
 By convention, class names not defined by Chothia (i.e. additional
 classes defined on the basis of new crystal structures) are followed
@@ -256,8 +282,8 @@ the definition of the canonical. This information is not used by the
 KabatMan program.
 
 
-4. The Database Model
-=====================
+5. The Database Model
+---------------------
 
 The database uses a simple functional data model (FDM). As well as
 allowing data stored directly in the database tables to be accessed,
@@ -282,8 +308,8 @@ this incurs a time penalty, the current database takes no more than a
 few seconds to search and the lack of optimisation simplifies the code.
 
 
-5. The Query Language
-=====================
+6. The Query Language
+---------------------
 
 Data in the database is accessed using a SQL-like query language. The
 main deviation between the language used here and SQL is that clauses
@@ -294,9 +320,9 @@ in the database, there is no FROM statement.
 The query language uses three statements: SET, SELECT and WHERE. The
 SELECT and WHERE commands take you into a mode where clauses are
 specified with no introductionary SELECT or WHERE keyword; the prompt
-changes from `KABATMAN>' to indicate the current mode. Conversely,
+changes from `KABATMAN>` to indicate the current mode. Conversely,
 the SET command needs to be specified on each line where variables are
-to be set and may only be given at the `KABATMAN>' prompt.
+to be set and may only be given at the `KABATMAN>` prompt.
 
 The SELECT and WHERE statements remain valid until a new statement is
 given. This allows multiple SELECT statements (each followed by a
@@ -307,8 +333,8 @@ conditions.
 
 The QUIT or EXIT command is used to leave the program.
 
-5.1 The SET Statement 
---------------------- 
+### 5.1 The SET Statement 
+
 This allows variables to be set. These are used to control the
 operation of the program and options set using this keyword remain
 valid until the program is terminated or another SET command is given.
@@ -316,13 +342,13 @@ The SET keyword must be given at the start of each line containing
 variables to be set and may only be given at the `KABATMAN>'
 prompt. More than one variable/value pair may be specified on the
 line. The syntax is thus:
-
+```
         SET variable value [variable value ...]
-
+```
 (Square brackets indicate optional items; you don't type them!)
 
 The following variables may be set:
-
+```
    Variable     Values               Notes
    --------     ------               -----
    LOOPS        KABAT, ABM, CHOTHIA, Sets the definitions to use for 
@@ -342,6 +368,7 @@ The following variables may be set:
                                      definition file
    DELIMiter    chararacter          Specify the field delimiter
                                      character
+```
 
 The VARIABILITY variable allows one to specify that only sequences
 with less than a specified sequence homology be displayed. After
@@ -370,7 +397,9 @@ query. The actual accession code and anchor tags will be appended
 to the string.
 
 The default string is:
+```
 href=http://immuno.bme.nwu.edu/scripts/noninter.tcl?qt=
+```
 
 If this doesn't mean anything to you, then DO NOT use this option!
 
@@ -378,9 +407,9 @@ If this doesn't mean anything to you, then DO NOT use this option!
 The SET CANONICAL command allows the canonical definitions (key residue)
 file to be specified. The default file (which is read on startup and
 may be re-read by giving the command SET CANONICAL DEFAULT) is called
-`chothia.dat'. Any string which you specify with the SET CANONICAL
-command (other than DEFAULT) will be appended with a '.' onto the name
-`chothia.dat' and this file will be read. For example, specifying
+`chothia.dat`. Any string which you specify with the SET CANONICAL
+command (other than DEFAULT) will be appended with a `.` onto the name
+`chothia.dat` and this file will be read. For example, specifying
 SET CANONICAL STRICT will cause the program to read definitions from
 a file called `chothia.dat.strict'
 
@@ -391,8 +420,8 @@ names contain commas so one can change to any other character (e.g. |)
 as a delimiter. A space is automatically appended to the delimiter.
 
 
-5.2 The SELECT Statement
-------------------------
+### 5.2 The SELECT Statement
+
 Specifies what data should be extracted from the database. Each field
 may be separated by a space and/or a comma. Parameters are placed in
 parentheses. In the case of the PIR command, the parameter is
@@ -401,7 +430,7 @@ optional; if not specified, output is to the standard output.
 The select statement may extend over more than one line.
 
 The following fields may be displayed:
-
+```
    Property         Notes
    --------         -------------------------
    NAME             Name of antibody
@@ -439,21 +468,21 @@ The following fields may be displayed:
    HFR4             Sequence of heavy framework 4
    SEQuence[(file)] Create a numbered sequence file (of given name if 
                     specified)
-
+```
 (The required parts of field names are in capital letters)
 
 
-5.3 The WHERE Statement
------------------------
+### 5.3 The WHERE Statement
+
 Specifies filters to be applied to the data in order to select a
 subset which is to be displayed.
 
 Each clause is specified in conventional order notation using the form:
-
+```
         property  test  value
-
+```
 The following properties are supported:
-
+```
    Property        Type     Notes
    --------        ----     -----
    NAME            string   The antibody name
@@ -488,13 +517,13 @@ The following properties are supported:
    HFR2            Sequence of heavy framework 2
    HFR3            Sequence of heavy framework 3
    HFR4            Sequence of heavy framework 4
-
+```
 (The required parts of field names are in capital letters)
 nnnnnn represents a 6-digit accession code.
 
 
 The following tests may be made:
-
+```
    Test                   Property type  Notes
    ----                   -------------  -----
    =, ==, eq              all            Exact match (NOTE 1)
@@ -504,13 +533,16 @@ The following tests may be made:
    >, gt                  integer        Greater than
    >=, ge                 integer        Greater than or equal
    cont,like,sim,inc,sub  string         Sub-string match (NOTES 2,3)
+```
 
-NOTE 1: The exact match is not recommended for use with strings; it is
+- NOTE 1: The exact match is not recommended for use with strings; it is
 much safer to use the substring match.
-NOTE 2: These test words are all equivalent and are the minimum string
+
+- NOTE 2: These test words are all equivalent and are the minimum string
 required. Thus `contains' may be used in place of `cont'; `includes' in
 place of `inc', etc.
-NOTE 3: Sub-string matches on the CDRs, LIGHT and HEAVY properties ignore
+
+- NOTE 3: Sub-string matches on the CDRs, LIGHT and HEAVY properties ignore
 dashes in the sequence allowing one to search for portions of sequence
 while ignoring gaps left for insertions.
 
@@ -538,11 +570,13 @@ generates a set which matches the specified test and places the set on
 a stack. The logical operators AND, OR and NOT cause operations to be
 performed on this stack of sets.
 
+```
    Stack        Operator        Stack    Notes
    -----        --------        -----    -----
    1 2          AND             1        Performs a logical AND
    1 2          OR              1        Performs a logical OR
    1            NOT             1        Performs a logical NOT
+```
 
 The stack has a maximum depth of 10 items. This should be more than
 enough for all likely queries providing that the logical operators are
@@ -551,8 +585,8 @@ prove insufficient, the constant STACKDEPTH in kabatman.h may be
 increased at compile time.)
 
 
-5.4 Running The Search
-----------------------
+### Running The Search
+
 The search is run by typing a . or ; on a line by itself. These cause
 output to be directed to the screen. Alternatively, output my be sent
 to a file by typing a greater than sign followed by a filename (a
@@ -562,59 +596,61 @@ output. Note that the PIR option in the SELECT statement also allows a
 file to be specified for output.
 
 
-5.5 Examples
-------------
+### Examples
+
 
 1. Find all complete antibodies where the antigen is known with loop
 lengths:
-
+```
 SELECT name,antigen,length(l1),length(l2),length(l3),
        length(h1),length(h2),length(h3)
 WHERE  antigen != '' complete = true and
 ;
-
+```
 
 2. Get the sequences of all complete mouse antibodies which bind to
 lysozyme, placing the results in a file AbLysozyme.pir:
-
+```
 SELECT pir(AbLysozyme.pir)
 WHERE  source   includes mouse
        antigen  includes lysozyme   AND
        complete =        true       AND
 ;
-
+```
 
 3. Find all antibodies with 11 residue CDR-L1s and a proline at the 
 sixth position:
-
+```
 SELECT name, l1
 WHERE  len(l1) = 11 res(L29) = P and
 ;
+```
 
 4. Find all complete antibodies with the sequence Ser-Ala-Ser-Ser-Ser 
 in the light chain. (Note that there must be no spaces in the sequence:
-
+```
 SELECT name, light
 WHERE  complete = t
        light includes SASSS AND
 ;
+```
 
 5. Find all Kappa-III light chains
-
+```
 SELECT name
 WHERE  light <> ''
        class includes 'kappa' and
        subgroup(L) = 'III'
 ;
+```
 
 
+7. Loop Definitions
+-------------------
 
-6. Loop Definitions
-===================
-
-The SET LOOPS command allows one of the following four sets of loop
+The `SET LOOPS` command allows one of the following four sets of loop
 definitions to be selected:
-
+```
    Loop      Kabat         AbM            Chothia       Contact
    ----      -----         ---            -------       -------
    L1        L24 -- L34    L24 -- L34     L24 -- L34    L30 -- L36
@@ -623,11 +659,12 @@ definitions to be selected:
    H1        H31 -- H35B   H26 -- H35B    H26 -- H32    H30 -- H35B
    H2        H50 -- H65    H50 -- H58     H52 -- H56    H47 -- H58
    H3        H95 -- H102   H95 -- H102    H95 -- H102   H93 -- H101
+```
 
+8. Standard Kabat Numbering
+---------------------------
 
-7. Standard Kabat Numbering
-===========================
-
+```
 Light chain:    0     1     2     3     4     5     6     7     8     9   
                10    11    12    13    14    15    16    17    18    19 
                20    21    22    23    24    25    26    27  
@@ -660,10 +697,10 @@ Heavy chain:    0     1     2     3     4     5     6     7     8     9
               100A  100B  100C  100D  100E  100F  100G  100H  100I  100J
               100K  101   102   103   104   105   106   107   108   109
               110   111   112   113
+```
 
-
-8. Deviations from the Standard Numbering
-=========================================
+9. Deviations from the Standard Numbering
+-----------------------------------------
 
 The Kabat standard numbering does not specify any naming convention for
 insertions which occur in addition to the supplied insertion
@@ -676,8 +713,8 @@ lead to differences in the naming of residues in such very long
 insertion regions.
 
 
-9. Acknowledgement
-==================
+10. Acknowledgement
+-------------------
 
 I should like to thank the maintainers of the Kabat sequence database
 for their assistance in making the data available and in listening to
@@ -685,8 +722,8 @@ our suggestions about the new format. In particular, my thanks go to
 George Johnson.
 
 
-10. Revision History
-====================
+11. Revision History
+--------------------
 
 V0.1  12.04.94 Development version
 V1.0  27.04.94 Original release version
@@ -743,3 +780,5 @@ V2.22 31.07.00 Added Contact loop definitions
 V2.23 03.04.02 Added DATE
 V2.24 28.02.05 Added LFR1...HFR4
 V2.25 24.08.06 Added SEQUENCE
+V2.26 07.10.19 A maintenance release - all moved to GitHub and an install
+               script added

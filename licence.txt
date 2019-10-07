@@ -2,11 +2,11 @@
 
                             LICENCE AGREEMENT
 
-The program, KabatMan, is copyright (c), 1993, Dr. Andrew C.R. Martin,
+The program, KabatMan, is copyright (c), 1993, Prof. Andrew C.R. Martin,
 University College London.
 
 This agreement is made between:
-   Dr. Andrew C.R. Martin,
+   Prof. Andrew C.R. Martin,
    Biomolecular Structure and Modelling Unit,
    Department of Biochemistry and Molecular Biology,
    University College London,
@@ -17,15 +17,9 @@ This agreement is made between:
    (martin@biochem.ucl.ac.uk)
 
 and:
-   Simon Foote,  (THE LICENSEE)
-   Novel Antibodies Group
-   Institute of Biological Sciences
-   National Research Council of Canada
-   
-   Canada
-   (foote@biologysx.lan.nrc.ca)
+   XXXXX,  (THE LICENSEE)
 
-Dr. Martin, University College London, grants to THE LICENSEE a
+Prof. Martin, University College London, grants to THE LICENSEE a
 non-exclusive and royalty-free license to use the computer program and
 its source code known as KabatMan.
 
@@ -38,27 +32,27 @@ purpose of backing up the data and software on the computer.
 THE LICENSEE may make modifications to the software for his own
 purposes, but such modifications may not be distributed. While it is
 not a requirement of this license, THE LICENSEE is encouraged to
-submit all such modifications to Dr. Martin for inclusion in future
+submit all such modifications to Prof. Martin for inclusion in future
 versions of KabatMan. Such modifications, if incorporated into future
-versions of KabatMan, will be acknowledged by Dr. Martin in the
+versions of KabatMan, will be acknowledged by Prof. Martin in the
 accompanying documentation and any publications relating solely to the
 KabatMan software, but no other form of recompense (whether monetry or
 otherwise) will be considered.
 
-THE LICENSEE acknowledges that Dr. Martin supplies KabatMan "as is"
+THE LICENSEE acknowledges that Prof. Martin supplies KabatMan "as is"
 and makes no guarantee as to its fitness to purpose and makes no
 warranties of any kind, whether express or implied.
 
-In no event will Dr. Martin be liable to THE LICENSEE or his
+In no event will Prof. Martin be liable to THE LICENSEE or his
 colleagues or agents, or to any other individual or entity connected
 with THE LICENSEE for any claim, loss or damage of any kind or nature
 in connection with the KabatMan software.
 
 Any publications or disclosure of results in any public manner whether
 orally or in writing which use data obtained by use of the KabatMan
-software or any modified version thereof shall acknowledge Dr. Martin.
+software or any modified version thereof shall acknowledge Prof. Martin.
 For written disclosures, any references supplied for the purpose by
-Dr. Martin shall be cited.
+Prof. Martin shall be cited.
 
 
 
